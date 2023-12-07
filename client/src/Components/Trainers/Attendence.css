@@ -1,0 +1,14 @@
+.detail-chart-section{
+    display: flex;
+    justify-content: space-around;
+}
+
+.student-details{
+    display: flex;
+    justify-content: space-around;
+}
+
+.student-thumb{
+    display: flex;
+    flex-direction: column;
+}
