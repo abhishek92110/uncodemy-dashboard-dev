@@ -60,11 +60,12 @@ function FeedbackDemo() {
 
         console.log('start and date from state =',rangeDate)
       
-        let selectDemo = await fetch(`http://localhost:8000/getRangeDemoes/${counselor._id}`,{
+        let selectDemo = await fetch(`http://localhost:8000/getCounselorRangeDemoes`,{
           method:"GET",
           headers:{
             "startDate":rangeDate.startDate,
-            "endDate":rangeDate.endDate
+            "endDate":rangeDate.endDate,
+            "id":counselor.counselorNo
           }
         })
       
@@ -80,7 +81,7 @@ function FeedbackDemo() {
        let trainerData =[]
  
        const setTrainerData = (e)=>{
-         setDetail({...detail,["trainer"]:trainerData[e.target.selectedIndex],["trainerName"]:e.target.value})
+         setDetail({...detail,["trainer"]:trainer[(e.target.selectedIndex)-1].code,["trainerName"]:e.target.value})
        }
 
        const setStartEndate = (timeValue) => {
@@ -194,7 +195,7 @@ function FeedbackDemo() {
             {trainer && <select className="custom-select mr-sm-2" required name='trainer' onChange={(e) => setTrainerData(e)}>
               <option selected>Choose Trainer...</option>
               {trainer.map((data,index) => {
-                trainerData[index+1] = data._id
+              
                 return (
                   <option value={data.Name}>{data.Name}</option>
                 )

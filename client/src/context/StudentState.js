@@ -154,10 +154,11 @@ const StudentState = (props) => {
   }
 
   const getAllDemoListCounselor  = async(id)=>{
-    let counselorDemo = await fetch(`http://localhost:8000/getCounselorDemo/${id}`, {
+    let counselorDemo = await fetch(`http://localhost:8000/getCounselorDemo/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "id":id,
       }
     });
 

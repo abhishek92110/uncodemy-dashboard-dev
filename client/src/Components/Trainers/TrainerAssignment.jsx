@@ -54,7 +54,7 @@ function Assignment() {
       trainer: trainerData.Name,
       file: null,
       url:null,
-      Trainer: trainerData._id,
+      Trainer: trainerData.code,
       batch:"",
       filetype:""
     }
@@ -69,7 +69,7 @@ function Assignment() {
   const [videoUrlInfo, setVideoUrlInfo] = useState({
     trainerName: trainerData.Name,
     videoUrl: "",
-    Trainer: trainerData._id,
+    Trainer: trainerData.code,
     VideoTitle: "",
   });
 
@@ -192,7 +192,8 @@ setTrainerAssignment(trainerAssignment)
 
       const data = await res.json();
       console.log("Data", data);
-    } catch (error) {
+    } catch (error) 
+    {
       console.log("error =", error.message);
     }
   };
@@ -768,7 +769,7 @@ const getAssignmentStudent = async(id)=>{
                           {notes=="link" &&
                           <> 
 
-<div className='main-link-div w-60'>
+                  <div className='main-link-div w-60'>
                     <div className='link-container'>
                         <div className="assignment-link">
                             {/* <h1 className='first-heading'>Assignment</h1> */}

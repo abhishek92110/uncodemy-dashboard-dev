@@ -22,7 +22,7 @@ import Swal from 'sweetalert2'
         Background: '',
         Trainer: '',
         TrainerId: '',
-        CounselorId: counselor._id,
+        CounselorId: counselor.counselorNo,
         CounselorName: counselor.Name,
         Course: '',
         Date: '',
@@ -48,7 +48,9 @@ import Swal from 'sweetalert2'
     const TrainerData = {}
     const setTrainerDetail =(e)=>{
 
-       setINP({...inpval,['Trainer']:e.target.value,['TrainerId']:TrainerData[e.target.value]})
+        console.log("index =",(e.target.selectedIndex)-1,trainer[(e.target.selectedIndex)-1].code)
+
+       setINP({...inpval,['Trainer']:e.target.value,['TrainerId']:trainer[(e.target.selectedIndex)-1].code})
     }
 
     const setdata = (e) => {
@@ -202,7 +204,6 @@ import Swal from 'sweetalert2'
                                                             onChange={e=>setTrainerDetail(e)}>
                                                             <option value="Trainer">Choose Trainer..</option>
                                                         {trainer.map(data=>{
-                                                            TrainerData[data.Name] = data._id
                                                             return(
                                                                 <option value={data.Name}>{data.Name}</option>
                                                             )

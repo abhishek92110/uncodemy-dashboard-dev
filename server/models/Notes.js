@@ -21,8 +21,7 @@ const Notes = new Schema({
     }, 
 
     Trainer:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'uploads'
+        type: String
     },  
 
     date:{

@@ -18,8 +18,7 @@ const UploadVideoUrl = new Schema({
         type: String
     }, 
     Trainer:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'uploads'
+        type: String
         }, 
     
     date:{

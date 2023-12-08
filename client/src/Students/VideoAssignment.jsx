@@ -9,7 +9,8 @@ export default function VideoAssignment(props) {
     const [selectedVideo, setSelectedVideo] = useState(null);
     let ContextValue = useContext(StudentContext);
 
-    const getTrainerdata = async (batch) => {
+    const getTrainerdata = async (batch) => 
+    {
         console.log('video get func =',batch)
         const res = await fetch(`http://localhost:8000/getuploadVideoUrl`, {
             method: "GET",

@@ -401,8 +401,8 @@ export default function AdminSendMessage() {
     if(userStatus==="trainer")
     {
 
-    console.log('trainer =',allTrainer,allTrainer[e.target.selectedIndex-1],e.target.selectedIndex)
-    setSelectedOption(allTrainer[e.target.selectedIndex-1])
+    console.log('trainer =',currentOption,e.target.selectedIndex===0?currentOption[e.target.selectedIndex]:currentOption[e.target.selectedIndex-1],e.target.selectedIndex)
+    setSelectedOption(e.target.selectedIndex===0?currentOption[e.target.selectedIndex].code:currentOption[e.target.selectedIndex-1].code)
     
     // setCurrentOption(allTrainer)
 
@@ -410,8 +410,8 @@ export default function AdminSendMessage() {
 
     else{
 
-    console.log('counselor =',allCounselor,allCounselor[e.target.selectedIndex-1],e.target.selectedIndex)
-    setSelectedOption(allCounselor[e.target.selectedIndex-1])
+    console.log('counselor =',allCounselor,e.target.selectedIndex===0?currentOption[e.target.selectedIndex]:currentOption[e.target.selectedIndex-1],e.target.selectedIndex)
+    setSelectedOption(e.target.selectedIndex===0?currentOption[e.target.selectedIndex].counselorNo:currentOption[e.target.selectedIndex-1].counselorNo)
 
 
     // setCurrentOption(allCounselor)
@@ -889,7 +889,7 @@ export default function AdminSendMessage() {
           
          })}
          </select>
-         <button className='btn btn-primary' onClick={e=>receivemessage(selectedOption._id)}> Filter </button>
+         <button className='btn btn-primary' onClick={e=>receivemessage(selectedOption)}> Filter </button>
          </>
 }
          

@@ -6,6 +6,8 @@ import { StudentContext } from '../../context/StudentState';
 
 export default function Cslidebar() {
 
+  document.title = "Uncodemy - Counsellor Dashboard"
+
     let ContextValue = useContext(StudentContext);
     const navigate = useNavigate();
     const navigation = useNavigate();
@@ -76,6 +78,7 @@ export default function Cslidebar() {
       const moveToFeedBack =()=>{
         
         navigate('/counsellor/Demo-Feedback', { state: { counselor } });
+
       }
       const moveToAllDemo =()=>{
         console.log('demo route',counselor)

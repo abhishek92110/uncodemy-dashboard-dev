@@ -6,6 +6,9 @@ import { StudentContext } from '../context/StudentState';
 
 
 export default function Sidebar() {
+
+  document.title = "Uncodemy - Admin Dashboard"
+
   let ContextValue = useContext(StudentContext);
 
   const navigation = useNavigate()

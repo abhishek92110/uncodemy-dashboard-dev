@@ -17,8 +17,7 @@ const UploadAssignment = new Schema({
         type: String
     },  
     Trainer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'counselors'
+        type: String
     },  
     date:{
         type: Date,

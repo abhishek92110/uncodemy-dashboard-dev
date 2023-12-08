@@ -71,7 +71,7 @@ export default function TrainerDashboard() {
         localStorage.setItem('trainerData', JSON.stringify(status.data))
         localStorage.setItem('trainerId', status.data._id)
         getBatch(status.data._id)
-        getTrainerUpcoming(status.data._id)
+        getTrainerUpcoming(status.data.code)
         getNewTrainerStudent(status.data._id)
         setCourse(status.data.Course)
       }

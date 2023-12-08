@@ -68,14 +68,17 @@ export default function Home() {
 
       console.log('status of student =',status);
       if (status.status === "active") {
-        getdata(status.data._id)
+        getdata(status.data.counselorNo)
         localStorage.setItem('counselorId',status.data._id)
         setCounselor(status.data)
         getNewCounselorStudent(status.data._id)
         getRegisterStudent(status.data._id)
-        getDemoCounselorStudent(status.data._id)
-        getNewCounselorDemo(status.data._id)
-        getCounselorUpcoming(status.data._id)
+    
+        console.log('counselor id from func before= ',status.data.counselorNo,status.data)
+        
+        getDemoCounselorStudent(status.data.counselorNo)
+        getNewCounselorDemo(status.data.counselorNo)
+        getCounselorUpcoming(status.data.counselorNo)
         getNewRegisterStudent(status.data._id)
         getCounselorTotalFees(status.data._id)
         getCounselorNewTotalFees(status.data._id)
@@ -318,6 +321,7 @@ setTodayDemoStudent(counselorUpcoming.totalDemoStudent)
   }
 
   const getDemoCounselorStudent  = async(id)=>{
+    console.log('counselor id from func= ',id)
     let counselorDemo = await ContextValue.getAllDemoListCounselor(id)
     console.log('all counselor demo =',counselorDemo)
     setAllDemo(counselorDemo.Demo)

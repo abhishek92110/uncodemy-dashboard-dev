@@ -7,6 +7,8 @@ import { StudentContext } from '../../context/StudentState'
 
 export default function TrainerSlidebar() {
 
+   document.title = "Uncodemy - Trainer Dashboard"
+
     const { id } = useParams()
     const navigate = useNavigate()
     let ContextValue = useContext(StudentContext);

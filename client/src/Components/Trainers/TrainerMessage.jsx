@@ -225,7 +225,7 @@ export default function TrainerMessage() {
     })
       .map((data, index) => {
         return {
-          id: data._id,
+          id: data.EnrollmentNo,
         };
       });
     }
@@ -235,7 +235,7 @@ else{
   }]
 }
    let sender = trainer.Name
-   let senderId  = trainer._id
+   let senderId  = trainer.code
 
    try{
     let data = await fetch('http://localhost:8000/sendmessage', {
@@ -521,7 +521,7 @@ else{
 className="btn btn-primary btn-sl-sm mr-3"
 type="button"
 onClick={sendMessage}
-disabled={(message.length!==0 && checkStatus===true)?false:true }
+disabled={(message.length!==0)?false:true }
 
 >
 <span className="mr-2">

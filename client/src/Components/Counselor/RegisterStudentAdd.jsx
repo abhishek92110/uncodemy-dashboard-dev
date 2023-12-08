@@ -43,7 +43,7 @@ const RegisterStudentAdd = () => {
     Course: "",
     subCourse:"",
     Counselor: counselor.Name,
-    CounselorId: counselor._id,
+    CounselorId: counselor.counselorNo,
     RegistrationFees: "",
     TrainerName: "",
     TrainerId: "",
@@ -115,7 +115,7 @@ const RegisterStudentAdd = () => {
     setINP({
       ...inpval,
       [e.target.name]: e.target.value,
-      ["TrainerId"]: trainerData[e.target.selectedIndex]
+      ["TrainerId"]: trainer[(e.target.selectedIndex-1)].code
     })
   }
 
@@ -313,7 +313,7 @@ const RegisterStudentAdd = () => {
                             }>
                               <option selected>Choose...</option>
                               {trainer.map((data,index) => {
-                                trainerData[index+1] = data._id
+                               
                                 return (
                                   <option value={data.Name}>{data.Name}</option>
                                 )

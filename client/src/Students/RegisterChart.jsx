@@ -139,13 +139,13 @@ const Horizontalchart = () => {
 
   const setCounselorData = (e)=>{
     console.log('select index =',e.target.selectedIndex,counselorData[e.target.selectedIndex])
-    setDetail({...detail,["counselor"]:counselorData[e.target.selectedIndex],["counselorName"]:e.target.value})
+    setDetail({...detail,["counselor"]:counselor[(e.target.selectedIndex)-1].counselorNo,["counselorName"]:e.target.value})
   }
   let trainerData =[]
 
   const setTrainerData = (e)=>{
     console.log('select index =',e.target.selectedIndex,counselorData[e.target.selectedIndex])
-    setDetail({...detail,["trainer"]:trainerData[e.target.selectedIndex],["trainerName"]:e.target.value})
+    setDetail({...detail,["trainer"]:trainer[(e.target.selectedIndex)-1].code,["trainerName"]:e.target.value})
   }
 
   const getCounselor = async()=>{
@@ -417,7 +417,6 @@ console.log('counselor id= ',data.CounselorId,detail.counselor, detail.trainer)
             {counselor && <select className="custom-select mr-sm-2" required name='counselor' onChange={(e) => setCounselorData(e)}>
               <option selected>Choose Counselor...</option>
               {counselor.map((data,index) => {
-                counselorData[index+1] = data._id
                 return (
                   <option value={data.Name}>{data.Name}</option>
                 )
@@ -430,7 +429,6 @@ console.log('counselor id= ',data.CounselorId,detail.counselor, detail.trainer)
             {trainer && <select className="custom-select mr-sm-2" required name='trainer' onChange={(e) => setTrainerData(e)}>
               <option selected>Choose Trainer...</option>
               {trainer.map((data,index) => {
-                trainerData[index+1] = data._id
                 return (
                   <option value={data.Name}>{data.Name}</option>
                 )

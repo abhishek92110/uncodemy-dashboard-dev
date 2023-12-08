@@ -733,6 +733,8 @@ router.post("/getStudentByCounselor", async (req, res) => {
     try {
         const userdata = await users.find(req.body);
         res.status(200).json(userdata);
+
+        // console.log("get counselor student =", userdata)
     } catch (error) {
         res.status(500).json(error);
     }
@@ -1132,7 +1134,7 @@ router.post("/uploadVideoUrl", async (req, res) => {
         const savedUser = await uploadvideourl.create(req.body);
         res.status(200).json(savedUser);
     } catch (error) {
-        // console.log(error.message);
+        console.log("error message =",error.message);
         res.status(500).json({ error: "Something went wrong" });
     }
 });
@@ -2120,6 +2122,7 @@ router.get('/Studentreceivemessage', async (req, res) => {
         fetchedItem.map((data, index) => {
 
             const fetchData = jwt.verify(data.messageid, jwt_secret);
+            console.log('fetchData =',fetchData.user.id)
 
             // console.log('message =',fetchData, id)
 
@@ -2128,6 +2131,7 @@ router.get('/Studentreceivemessage', async (req, res) => {
                 // console.log('element =',element)
 
                 if (id === element.id) {
+                     console.log('element and id =',id,element.id)
                     message.push({
                         message: fetchedItem[index].message,
                         from: fetchedItem[index].from,
@@ -2995,10 +2999,12 @@ router.get('/getRangeDemoes', async (req, res) => {
 
 // counselor range demoes
 
-router.get('/getRangeDemoes/:id', async (req, res) => {
+router.get('/getCounselorRangeDemoes', async (req, res) => {
    
     let startDate = req.header("startDate");
-    const {id} = req.params
+
+    const id = req.header("id")
+
     console.log("get range  demo from id",id)
 
     let endDate = req.header("endDate");
@@ -3255,8 +3261,8 @@ router.post('/getDemoesCounselor', async (req, res) => {
         res.send(error.message)
     }
 })
-router.get('/getCounselorDemo/:id', async (req, res) => {
-    const { id } = req.params
+router.get('/getCounselorDemo', async (req, res) => {
+    const id  = req.header("id")
     console.log("counselor id from func=",id)
 
     try {

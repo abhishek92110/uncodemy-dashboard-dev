@@ -42,10 +42,10 @@ export default function SendMessage() {
       const status = await ContextValue.checkCounsellor();
 
       setCounselor(status.data)
-      console.log('status of cousnelor message=', status.data._id);
+      console.log('status of cousnelor message=', status.data,status.data.counselorNo);
       if (status.status === "active") {
        
-        let message = await ContextValue.getReceiveMessage(status.counselorNo)
+        let message = await ContextValue.getReceiveMessage(status.data.counselorNo)
         console.log('cousnelor message=',message);
         setMessageData(message)
 
@@ -155,7 +155,7 @@ export default function SendMessage() {
     })
       .map((data, index) => {
         return {
-          id: data._id,
+          id: data.EnrollmentNo,
         };
       });
     }
@@ -168,7 +168,7 @@ else{
     console.log('check id =', checkedId)
 
     let sender = counselor.Name
-    let fromId = counselor._id
+    let fromId = counselor.counselorNo
 
     ContextValue.updateProgress(30)
     ContextValue.updateBarStatus(true)
@@ -270,6 +270,7 @@ else{
                                <tr>
                                  <th scope="col"><input type='checkbox' onClick={event => allcheck(event)}></input></th>
                                  <th scope="col">Name</th>
+                                 <th scope="col">Enrollment No.</th>
                                  <th scope="col">Counselor</th>
                                  <th scope="col">Batch</th>
                                  
@@ -287,6 +288,7 @@ else{
                                        />
                                      </td>
                                      <td>{data.Name}</td>
+                                     <td>{data.EnrollmentNo}</td>
                                      <td>{data.Counselor}</td>
                                      <td>{data.Batch}</td>
                                   

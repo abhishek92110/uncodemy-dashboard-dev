@@ -3,6 +3,9 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { StudentContext } from "../context/StudentState";
 
 export default function StudentSlidebar() {
+
+  document.title = "Uncodemy - Student Dashboard"
+
   let ContextValue = useContext(StudentContext);
   const [StudentID, setStudentID] = useState();
   const [student, setStudent] = useState(0)

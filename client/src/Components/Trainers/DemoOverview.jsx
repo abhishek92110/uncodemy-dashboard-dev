@@ -58,7 +58,7 @@ function DemoOverview() {
       console.log('status of trainer =', status);
       if(status.status==="active"){
         // getTrainerdemo();
-        getTrainerUpcomingDemo(status.data._id)
+        getTrainerUpcomingDemo(status.data.code)
       }
       else{
         navigation('/')

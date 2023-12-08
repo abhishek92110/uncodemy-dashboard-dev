@@ -149,7 +149,6 @@ const userSchema = new mongoose.Schema({
 
      DueDate: {
         type: Object,
-
     },
     
     BatchStartingDate:{
@@ -171,8 +170,7 @@ const userSchema = new mongoose.Schema({
         ref: 'uploads'
     }, 
     CounselorID:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'counselors'
+        type: String,
     },
     RegistrationNo:{
         type: String,

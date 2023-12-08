@@ -43,11 +43,12 @@ export default function RegisterStudent(props) {
   })
 
   const filterStudent = (registerData) => {
-    console.log('register student')
+    
+    console.log('register student',detail)
  
     let filterRegister = registerData.filter((data, index) => {
   
-      return (detail.trainer!= null ? data.TrainerId === detail.trainer : true) && (detail.counselor != null ? data.CounselorId === detail.counselor : true) && (status!=="" ? data.status === status : true)
+      return (detail.trainer!= null ? data.TrainerId == detail.trainer : true) && (detail.counselor != null ? data.CounselorId == detail.counselor : true) && (status!=="" ? data.status == status : true)
   
     })
     console.log('filter register student =',filterRegister)
@@ -106,13 +107,13 @@ export default function RegisterStudent(props) {
 
    const setCounselorData = (e)=>{
      console.log('select index =',e.target.selectedIndex,counselorData[e.target.selectedIndex])
-     setDetail({...detail,["counselor"]:counselorData[e.target.selectedIndex],["counselorName"]:e.target.value})
+     setDetail({...detail,["counselor"]:counselor[(e.target.selectedIndex-1)].counselorNo,["counselorName"]:e.target.value})
    }
    let trainerData =[]
  
    const setTrainerData = (e)=>{
      console.log('select index =',e.target.selectedIndex,counselorData[e.target.selectedIndex])
-     setDetail({...detail,["trainer"]:trainerData[e.target.selectedIndex],["trainerName"]:e.target.value})
+     setDetail({...detail,["trainer"]:trainer[(e.target.selectedIndex-1)].code,["trainerName"]:e.target.value})
    }
 
   
@@ -243,7 +244,7 @@ export default function RegisterStudent(props) {
             {counselor && <select className="custom-select mr-sm-2" required name='counselor' onChange={(e) => setCounselorData(e)}>
               <option selected>Choose Counselor...</option>
               {counselor.map((data,index) => {
-                counselorData[index+1] = data._id
+               
                 return (
                   <option value={data.Name}>{data.Name}</option>
                 )
@@ -256,7 +257,7 @@ export default function RegisterStudent(props) {
             {trainer && <select className="custom-select mr-sm-2" required name='trainer' onChange={(e) => setTrainerData(e)}>
               <option selected>Choose Trainer...</option>
               {trainer.map((data,index) => {
-                trainerData[index+1] = data._id
+                
                 return (
                   <option value={data.Name}>{data.Name}</option>
                 )
