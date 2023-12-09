@@ -166,8 +166,7 @@ const userSchema = new mongoose.Schema({
     },
     
     TrainerID:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'uploads'
+        type: String,
     }, 
     CounselorID:{
         type: String,

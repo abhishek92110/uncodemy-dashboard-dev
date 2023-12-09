@@ -205,7 +205,7 @@ export default function App() {
             <Route exact path="student/" element={ <StudentDashboard />} />
             <Route exact path="student/Sendmessage" element={[ <StudentMessage />]} />
             <Route exact path="/student/StudentAssigment" element={[ <StudentAssig />]} />
-            <Route exact path="fullattendance/:id" element={[ <>
+            <Route exact path="admin/fullattendance" element={[ <>
       <Header />
       <div style={{ display: 'flex' }}>
         <Sidebar />
@@ -468,9 +468,9 @@ export default function App() {
       </div>
     </>} />
             <Route exact path="/trainer/attendence" element={<StudentAttandance />} />
-            <Route exact path="/trainer/student/:id" element={<TrainerStudent />} />     
+            <Route exact path="/trainer/student" element={<TrainerStudent />} />     
      
-            <Route exact path="/trainer/student/:id/attendencedetail/:id" element={ 
+            <Route exact path="/trainer/student/attendencedetail" element = { 
             <>      
                <Header />
             <div style={{ display: 'flex' }}>

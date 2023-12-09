@@ -192,7 +192,7 @@ function AttandanceSheet() {
             // console.log("inside if attendance index",attendanceIndex,filterAttendance)
     
             filterAttendance[0].studentId.map(data=>{
-              if(studentData._id===data.studentId){
+              if(studentData.EnrollmentNo===data.studentId){
                 
                 tempAttendenceRows[index].push(<td className={`text-${data.status==="present"?"success":"danger"}`}>{data.status}</td>)
 
@@ -292,7 +292,7 @@ else{
           {runningBatch && <select className="custom-select mr-sm-2" required name='batch' onChange={(e) => setBatchDetail(e)} >
             <option selected>Choose Batch...</option>
             { runningBatch.map((data,index) => {
-              batchData[index]=data._id
+              batchData[index]=data.EnrollmentNo
               return (
                 <option value={data.Batch}>{data.Batch}</option>
               )

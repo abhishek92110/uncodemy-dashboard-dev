@@ -166,7 +166,7 @@ const EditRunningBatch = () => {
       //     return data._id === trainerData[trainerName]
       // })[0].code
       setCurrentTrainer(trainer[e.target.selectedIndex-1])
-      setBatchDetail({ ...batchDetail, ["Trainer"]: trainer[e.target.selectedIndex-1].Name, ["TrainerID"]: trainer[e.target.selectedIndex-1]._id,["trainerCode"]:trainer[e.target.selectedIndex-1].code})
+      setBatchDetail({ ...batchDetail, ["Trainer"]: trainer[e.target.selectedIndex-1].Name, ["TrainerID"]: trainer[e.target.selectedIndex-1].code,["trainerCode"]:trainer[e.target.selectedIndex-1].code})
       getCourses(trainer[e.target.selectedIndex-1])
       getRunningBatchTrainer(trainer[e.target.selectedIndex-1])
       setINP({...inpval,["Trainer"]:trainer[e.target.selectedIndex-1].Trainer})

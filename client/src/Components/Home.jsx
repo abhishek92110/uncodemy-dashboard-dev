@@ -600,6 +600,9 @@ ContextValue.updateBarStatus(false)
     
   }
 
+  const moveToStudentAttendance = ( batch, id)=>{
+    navigate('fullattendance', { state: { id:id, batch:batch } });
+  }
 
   return (
 
@@ -904,7 +907,8 @@ ContextValue.updateBarStatus(false)
                                   <button className="btn btn-primary text-light"> <NavLink to={`/EditStudents/${data._id}`}> <CreateIcon /></NavLink></button>
                                   <button className="btn btn-danger text-light" onClick={() => deleteuser(data._id)}><DeleteOutlineIcon /></button>
                                   <button className="btn btn-warning text-light" onClick={() => showMessagedialog(data._id)}><MessageIcon /></button>
-                                  <button className="btn btn-danger text-light"><NavLink to={`/fullattendance/${data._id}`}><i class="fa-solid fa-clipboard-user text-light"></i></NavLink></button>
+                                  {/* <button className="btn btn-danger text-light"><NavLink to={`/fullattendance/${data._id}`}><i class="fa-solid fa-clipboard-user text-light"></i></NavLink></button> */}
+                                  <button className="btn btn-danger text-light" onClick={e=>moveToStudentAttendance(null,data._id)}><i class="fa-solid fa-clipboard-user text-light"></i></button>
                                   <button className="btn btn-success "><NavLink to={`AddFees/${data._id}`}><CurrencyRupeeIcon /></NavLink></button>
                                 </td>
                               </tr>

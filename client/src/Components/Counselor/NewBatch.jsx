@@ -60,7 +60,7 @@ function NewBatch() {
         //     return data._id === trainerData[trainerName]
         // })[0].code
         setCurrentTrainer(trainer[index])
-        setBatchDetail({ ...batchDetail, ["trainer"]: trainer[index].code, ["TrainerID"]: trainer[index]._id })
+        setBatchDetail({ ...batchDetail, ["trainer"]: trainer[index].code, ["TrainerID"]: trainer[index].code })
         getCourses(trainer[index])
         getRunningBatchTrainer(trainer[index])
     }

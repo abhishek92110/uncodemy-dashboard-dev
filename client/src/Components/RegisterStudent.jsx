@@ -40,6 +40,7 @@ export default function RegisterStudent(props) {
     trainerName:null,
     counselor: null,
     counselorName: null
+    
   })
 
   const filterStudent = (registerData) => {

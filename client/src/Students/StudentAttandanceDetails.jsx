@@ -1,11 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import StudentSlidebar from "./StudentSlidebar";
 import { StudentContext } from '../context/StudentState';
 import Header from "../Components/Header";
 
 function StudentAttandanceDetails() {
-  let { id } = useParams();
+  const location = useLocation();
+  const { id, batch } = location.state;
+
+  console.log("id and batch =",id,batch)
+
   // console.log('id =', id)
 
   let checkDate;
@@ -14,7 +18,7 @@ function StudentAttandanceDetails() {
   const [dayRows, setDayRows] = useState([]);
   const [attendenceRows, setAttendanceStatus] = useState([]);
   const [batchDetail, setBatchDetail] = useState({
-    batch:"",
+    batch:batch===null?"":batch,
     batchTime:"",
     batchTrainer:"",
     trainerId:""
@@ -70,6 +74,12 @@ function StudentAttandanceDetails() {
   useEffect(async () => {
     // FullAttand();
     getstudent();
+    console.log('batch outside =',batch)
+
+    if(batch){
+      console.log('batch =',batch)
+      setStudentBatch(batch)
+    }
 
     // fillAttendance()
   }, []);
@@ -94,7 +104,7 @@ function StudentAttandanceDetails() {
     }
   };
 
-  const getAttendance = async (student) => {
+  const getAttendance = async(student) => {
     console.log("first last ", filteredMonth, student,batchDetail);
     let filterStatus = await fetch("http://localhost:8000/getMonthAttendance", {
       method: "POST",
@@ -107,7 +117,7 @@ function StudentAttandanceDetails() {
       }),
     });
     let data = await filterStatus.json();
-    console.log("data =", data);
+    console.log("data attendance =", data);
 
     setAllAttendance(data);
     extractAttendance(data, student);
@@ -124,7 +134,7 @@ function StudentAttandanceDetails() {
     res = await res.json();
     console.log("student =", res.userIndividual);
     setStudent(res.userIndividual);
-    setBatchDetail({...batchDetail,["batch"]:res.userIndividual.studentRunningBatch[0], ["batchTime"]:res.userIndividual.BatchTiming,["batchTrainer"]:res.userIndividual.TrainerName,["trainerId"]:res.userIndividual.TrainerID})
+    // setBatchDetail({...batchDetail,["batch"]:res.userIndividual.studentRunningBatch[0], ["batchTime"]:res.userIndividual.BatchTiming,["batchTrainer"]:res.userIndividual.TrainerName,["trainerId"]:res.userIndividual.TrainerID})
     // fillAttendance(tempMonthAttendance, res)
     // getAttendance(res.userIndividual);
   };
@@ -163,10 +173,10 @@ function StudentAttandanceDetails() {
         let presentStatus = false;
 
     
-          // console.log("else ",currentStudent._id)
+          // console.log("else ",currentStudent.EnrollmentNo)
         
           filterAttendance[0].studentId.map(data=>{
-            if(currentStudent._id===data.studentId){
+            if(currentStudent.EnrollmentNo===data.studentId){
               tempAttendanceRow.push(<td className={`text-${data.status==="present"?"success":"danger"}`}>{data.status}</td>)
 
             }
@@ -223,7 +233,7 @@ function StudentAttandanceDetails() {
   //                         let presentStatus = false;
   //                         presentId[index].user.id.map((presentdata,presentIndex) => {
 
-  //                             if (presentdata === student._id && presentStatus === false) {
+  //                             if (presentdata === student.EnrollmentNo && presentStatus === false) {
   //                                 console.log('for present',presentIndex)
   //                                 presentStatus = true;
   //                                 status.push("present")
@@ -280,23 +290,23 @@ function StudentAttandanceDetails() {
   //                         let presentStatus = false;
   //                         presentId[index].user.id.map((presentdata,presentIndex) => {
 
-  //                             if (presentdata === student._id && presentStatus===false) {
+  //                             if (presentdata === student.EnrollmentNo && presentStatus===false) {
   //                                 presentStatus = true;
-  //                                 console.log('present =',presentdata,student._id,presentIndex)
+  //                                 console.log('present =',presentdata,student.EnrollmentNo,presentIndex)
   //                                 status.push("present")
   //                             }
   //                         })
 
   //                         if (presentStatus === false) {
   //                             status.push("absent")
-  //                             console.log('absent =',student._id)
+  //                             console.log('absent =',student.EnrollmentNo)
 
   //                         }
   //                     }
   //                 }
   //                 else {
   //                     status.push("holiday")
-  //                     console.log('holiday =',student._id)
+  //                     console.log('holiday =',student.EnrollmentNo)
   //                 }
   //             }
 
@@ -325,7 +335,7 @@ function StudentAttandanceDetails() {
   //                         let presentStatus = false;
   //                         presentId[index].user.id.map(presentdata => {
 
-  //                             if (presentdata === student._id && presentStatus === false) {
+  //                             if (presentdata === student.EnrollmentNo && presentStatus === false) {
   //                                 presentStatus = true;
   //                                 status.push("present")
   //                             }
@@ -379,7 +389,7 @@ function StudentAttandanceDetails() {
   //                         let presentStatus = false;
   //                         presentId[index].user.id.map(presentdata => {
 
-  //                             if (presentdata === student._id && presentStatus === false) {
+  //                             if (presentdata === student.EnrollmentNo && presentStatus === false) {
   //                                 presentStatus = true;
   //                                 status.push("present")
   //                             }
@@ -407,7 +417,7 @@ function StudentAttandanceDetails() {
   //             if (((status.length) - (index + 1)) > 1) {
   //                 if (status[index + 1] === 'absent' && status[index + 2] === 'absent') {
 
-  //                     let checkId = [student._id]
+  //                     let checkId = [student.EnrollmentNo]
 
   //                 }
   //             }
@@ -416,7 +426,8 @@ function StudentAttandanceDetails() {
 
   // }
 
-  const setStudentBatch = async(batch) =>{
+  const setStudentBatch = async(batch) =>
+  {
     let batchData = await ContextValue.getBatchDetail(batch)
     setBatchDetail({batchDetail,["batch"]:batchData.Batch,["batchTime"]:batchData.BatchTime,["batchTrainer"]:batchData.Trainer,["trainerId"]:batchData.TrainerID})
     console.log("batch data =",batchData)
@@ -447,11 +458,11 @@ function StudentAttandanceDetails() {
                       </div>
                       <div className="full-data">
                         <h3 className="attendance-data">Trainer Name:</h3>
-                        <h4 className="attendance-data-h4">{batchDetail && batchDetail.batchTrainer}</h4>
+                        <h4 className="attendance-data-h4">{batchDetail.batchTrainer && batchDetail.batchTrainer}</h4>
                       </div>
                       <div className="full-data">
                         <h3 className="attendance-data">Batch Time:</h3>
-                        <h4 className="attendance-data-h4">{batchDetail && batchDetail.batchTime}</h4>
+                        <h4 className="attendance-data-h4">{batchDetail.batchTime && batchDetail.batchTime}</h4>
                       </div>
                     </div>
 
@@ -476,7 +487,13 @@ function StudentAttandanceDetails() {
                         </button>
                       </div>
 
-                      {student && <select
+                   { 
+                   !batch &&                   
+                   student && 
+             
+                   
+                    <>
+                    <select
                         id="exampleInputPassword1"
                         type="select"
                         name="Course"
@@ -494,7 +511,7 @@ function StudentAttandanceDetails() {
                     })}
                        
                         
-                    </select>}
+                    </select>
                     
                     <div className="search">
                         <button
@@ -504,6 +521,8 @@ function StudentAttandanceDetails() {
                           Filter
                         </button>
                       </div>
+                    </>
+                      }
 
                     </div>
 

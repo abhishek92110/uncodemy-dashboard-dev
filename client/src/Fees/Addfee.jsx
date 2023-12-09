@@ -70,7 +70,7 @@ function Addfee() {
         setStudent(status.userIndividual)
         let tempInpval  ={...inpval}
         for(let data in status.userIndividual){
-          console.log("inside data =",data)
+          // console.log("inside data =",data)
           tempInpval[data]  = status.userIndividual[data]
         }
 
@@ -129,7 +129,7 @@ function Addfee() {
       console.log("Data",data)
     }
     catch (error) {
-      console.log('error =', error.message)
+      console.log('error =', error, error.message)
     }
   }
   return (

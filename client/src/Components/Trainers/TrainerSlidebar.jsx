@@ -14,6 +14,7 @@ export default function TrainerSlidebar() {
     let ContextValue = useContext(StudentContext);
     const navigation = useNavigate();
     const [trainerId, setTrainerId] = useState();
+    const [trainerCode, setTrainerCode] = useState();
   
     useEffect(() => {
       fetchTrainerStatus();
@@ -26,6 +27,7 @@ export default function TrainerSlidebar() {
         console.log("status of trainer =", status);
         if (status.status === "active") {
           setTrainerId(status.data._id);
+          setTrainerCode(status.data.code);
         } else {
           navigation("/");
           alert("you are not authorized");
@@ -38,6 +40,10 @@ export default function TrainerSlidebar() {
     const moveToAttendance = (id)=>{
       console.log("attendance id =",id)
       navigation('/trainer/add-attendance',{state:{id}})
+    }
+    const moveToStudent = (id)=>{
+      console.log("attendance id =",id)
+      navigation('/trainer/student',{state:{id}})
     }
 
     
@@ -73,11 +79,16 @@ export default function TrainerSlidebar() {
                             <Link className="has-arrow" to={`/trainer/demooverview`}> Demo</Link>
                         </li>
                         <li>
-              <Link className="has-arrow" to={`/trainer/student/${trainerId}`}>
-                Student
-              </Link>
+      
+
+              <li className='text-light sidebar-list cursor-pointer' onClick={e=>moveToStudent(trainerCode)}>
+                
+              Student
+              
+                </li>
+
               </li>
-              <li className='text-light sidebar-list cursor-pointer' onClick={e=>moveToAttendance(trainerId)}>
+              <li className='text-light sidebar-list cursor-pointer' onClick={e=>moveToAttendance(trainerCode)}>
                 
                 Attendance
               

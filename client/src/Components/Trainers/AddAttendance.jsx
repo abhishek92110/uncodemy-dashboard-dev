@@ -70,7 +70,7 @@ function AddAttendance() {
     const currentDate = new Date();
     setDateFunc(currentDate);
     console.log("useEffect = ", ContextValue.studentId);
-  }, [ContextValue.studentId]);
+  }, []);
 
   const setDateFunc = (currentDate) => {
     console.log("value =", currentDate);
@@ -327,7 +327,7 @@ function AddAttendance() {
 
       student.map((data) => {
         tempStudentId.push({
-          studentId: data._id,
+          studentId: data.code,
           status: undefined,
         });
       });
@@ -356,7 +356,7 @@ function AddAttendance() {
       tempStudentId = [];
       currentStudent.map((data) => {
         tempStudentId.push({
-          studentId: data._id,
+          studentId: data.EnrollmentNo,
           status: value,
         });
       });
@@ -502,7 +502,7 @@ function AddAttendance() {
                 {currentStudent &&
                   currentStudent.map((data, index) => 
                   {
-                    console.log("student id form map", studentId);
+                    // console.log("student id form map", studentId);
                     return (
                       <tr key={index}>
                         <td>{data.Name}</td>
@@ -521,7 +521,7 @@ function AddAttendance() {
                             name={`attendance-checkbox${index}`}
                             disabled={markStatus === "holiday" ? true : false}
                             onClick={(e) =>
-                              setAttendanceId(e.target.value, data._id, index)
+                              setAttendanceId(e.target.value, data.code, index)
                             }
                           ></input>
                         </td>
@@ -540,7 +540,7 @@ function AddAttendance() {
                             name={`attendance-checkbox${index}`}
                             disabled={markStatus === "holiday" ? true : false}
                             onClick={(e) =>
-                              setAttendanceId(e.target.value, data._id, index)
+                              setAttendanceId(e.target.value, data.code, index)
                             }
                           ></input>
                         </td>
@@ -562,7 +562,9 @@ function AddAttendance() {
                   })}
               </tbody>
             </table>
-            <div className="update-attendance">
+          
+          </div>
+          <div className="update-attendance">
               {AttendanceStatus === false ? (
                 <button
                   className="btn btn-primary"
@@ -582,7 +584,6 @@ function AddAttendance() {
                 </button>
               )}
             </div>
-          </div>
         </div>
       </div>
     </>

@@ -1,13 +1,16 @@
 import React, { useEffect, useContext, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { StudentContext } from "../../context/StudentState";
 import TrainerSlidebar from "./TrainerSlidebar";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Header from "../Header";
 
 const TrainerStudent = () => {
+  
+  const location = useLocation();
+
   let ContextValue = useContext(StudentContext);
-  const { id } = useParams();
+  const { id } = location.state;
   const navigate = useNavigate();
 
   const [currentStudent, setCurrentStudent] = useState([]);
@@ -21,6 +24,7 @@ const TrainerStudent = () => {
   });
 
   useEffect(() => {
+    console.log("useEffect id =",id)
     if (id) {
       getBatch(id);
       getTrainerData(id);
@@ -52,6 +56,7 @@ const TrainerStudent = () => {
   };
 
   const getBatch = async (id) => {
+    console.log("get batch =",id)
     try {
       let batchData = await ContextValue.getTrainerRunningBatch(id);
 
@@ -62,17 +67,19 @@ const TrainerStudent = () => {
     }
   };
 
-  const filterStudent = () => {
+  const filterStudent = async() => {
     setFilterStatus(true);
     console.log("filter =", filter);
     localStorage.setItem("trainerBatch", filter.batch);
 
-    let filterStudent = allStudent.filter((data) => {
-      return (
-        (filter.course === "" ? data.Course : data.Course === filter.course) &&
-        (filter.batch === "" ? data.Batch : data.Batch === filter.batch)
-      );
-    });
+    let filterStudent = await ContextValue.getRunningBatchStudent(filter.batch);
+
+    // let filterStudent = allStudent.filter((data) => {
+    //   return (
+    //     (filter.course === "" ? data.Course : data.Course === filter.course) &&
+    //     (filter.batch === "" ? data.Batch : data.Batch === filter.batch)
+    //   );
+    // });
 
     console.log("filter student =", filterStudent);
     setCurrentStudent(filterStudent);
@@ -82,6 +89,10 @@ const TrainerStudent = () => {
   const toggleDocument = (student) => {
     navigate('StudentAssignment', { state: { student } });
 };
+
+const moveToStudentAttendance = ( batch, id)=>{
+  navigate('attendencedetail', { state: { id:id, batch:batch } });
+}
 
   return (
     <div>
@@ -149,11 +160,14 @@ const TrainerStudent = () => {
                           <td>{data.Number}</td>
                           <td>{data.BatchTiming}</td>
                           <td>{data.Course}</td>
-                          <Link to={`attendencedetail/${data._id}`}>
-                            <td>
+                         
+                          
+                            <td onClick={e=>moveToStudentAttendance(filter.batch,data._id)}>
+
                               <i className="fa-solid fa-clipboard-user"></i>
-                            </td>
-                          </Link>
+
+                          </td>
+                       
                           <td>
                           <button className="btn btn-success text-light" onClick={e=>toggleDocument(data)}>
                                                             <RemoveRedEyeIcon />

@@ -7,6 +7,7 @@ import Swal from 'sweetalert2'
 import { HashLoader } from "react-spinners";
 
 const RegisterStudentAdd = () => {
+
   const [allcourse, setAllCourse] = useState();
   const [trainer, setTrainer] = useState();
   const [course, setCourse] = useState();
@@ -306,7 +307,7 @@ const RegisterStudentAdd = () => {
                           </div>
                         </div>
 
-                        <div className="col-lg-6 col-md-6 col-sm-12">
+                       {/* <div className="col-lg-6 col-md-6 col-sm-12">
                           <div className="form-group">
                             <label className="form-label">Trainer Name </label>
                             {trainer && <select className="custom-select mr-sm-2" required name='TrainerName' onChange={(e) => setTrainerData(e)
@@ -322,7 +323,7 @@ const RegisterStudentAdd = () => {
                             </select>
                             }
                           </div>
-                        </div>
+                        </div> */}
                         <div className="col-lg-6 col-md-6 col-sm-12">
                           <div className="form-group">
                             <label className="form-label">Registration Fees</label>

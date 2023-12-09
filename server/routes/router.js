@@ -175,11 +175,11 @@ dueDate4 = dueDate4.toISOString().split('T')[0]
         const newUser = new users(req.body);
 
         const savedUser = await newUser.save();
-        const updateRegistration = await registerStudent.update({RegistrationNo:req.body.RegistrationNo},{$set:{status:"Added"}})
+        const updateRegistration = await registerStudent.updateOne({RegistrationNo:req.body.RegistrationNo},{$set:{status:"Added"}})
         res.status(200).json(savedUser);
         // sendmail(req, res)
     } catch (error) {
-        console.log(error.message);
+        console.log("error of register student",error.message);
         res.status(500).json({ error: "Something went wrong" });
     }
 });
@@ -3639,6 +3639,22 @@ router.get('/getrunningBatch', async (req, res) => {
     }
 })
 
+// get Running Batch by batch Name
+
+
+router.get('/getrunningBatchbyBatchName', async (req, res) => {
+
+    let batch = req.header("batch")
+
+    try {
+        let runningBatches = await runningBatch.find({Batch:batch})
+        res.send({ "status": "active", "runningBatches": runningBatches })
+    }
+    catch (error) {
+        res.send({ "error": error.message })
+    }
+})
+
 
 router.get('/getrunningBatchByTrainer/:id', async (req, res) => {
 
@@ -3928,12 +3944,15 @@ router.get("/counselorStudent/:id", async (req, res) => {
 //Fee Router----
 
 router.post("/AddFee/:id", controller.upload, async (req, res) => {
+
+    console.log("add fees route")
+
     const { id } = req.params
     const userindividual = await users.findById(id);
     // console.log("ad fee router from =",req.params, req.body)
     req.body.url = req.url
     req.body.file = req.file
-    req.body.user = id
+    req.body.user = userindividual.EnrollmentNo
     req.body.Name = userindividual.Name
     req.body.EnrollmentNo = userindividual.EnrollmentNo
     req.body.Batch = userindividual.Batch
@@ -3965,7 +3984,7 @@ router.post("/AddFee/:id", controller.upload, async (req, res) => {
 
 
     } catch (error) {
-        // console.log("error=",error.message);
+        console.log("error message from fees route=",error.message);
         res.status(500).json({ error: "Something went wrong" });
     }
 });
