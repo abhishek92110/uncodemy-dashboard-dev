@@ -6,7 +6,7 @@ const baseUrl = "http://localhost:8000/files/";
 console.log('file controller')
 
 const upload = async (req,res,next) => {
-  // console.log('upload function',req.body)
+  console.log('upload function')
   try {
     // console.log('user1 =',req.file)
     await uploadFile(req, res);
@@ -18,13 +18,14 @@ const upload = async (req,res,next) => {
     req.url  =baseUrl+req.file.originalname;
     req.file = req.file.originalname.split('.');
     req.file = req.file[0]
-    // console.log('req body url file =', req.file,req.url)
-    next()
+    console.log('before next function =')
+    next();
     // res.status(200).send({
     //   message: "Uploaded the file successfully: " + req.file.originalname,
 
     // });
-  } catch (err) {
+  } 
+  catch (err) {
     console.log(err);
 
     if (err.code === "LIMIT_FILE_SIZE") {

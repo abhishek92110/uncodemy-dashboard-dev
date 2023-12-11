@@ -290,6 +290,7 @@ ContextValue.updateBarStatus(false)
     });
 
     const data = await res.json();
+    console.log('student data =',data);
     setTotalItem(data.length)
     localStorage.setItem('allStudent', JSON.stringify(data))
 

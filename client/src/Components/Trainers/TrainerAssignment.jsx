@@ -148,7 +148,7 @@ setTrainerAssignment(trainerAssignment)
 
       console.log("status of trainer =", status);
       if (status.status === "active") {
-        getTrainerBatch(status.data._id);
+        getTrainerBatch(status.data.code);
       } else {
         navigation("/");
         alert("you are not authorized");

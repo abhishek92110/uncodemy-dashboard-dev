@@ -90,6 +90,10 @@ const userSchema = new mongoose.Schema({
         type: String,
 
     },
+    courseRunningStatus: {
+        type: String,
+
+    },
 
     PaymentStatus: {
         type: String,

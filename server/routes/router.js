@@ -54,7 +54,8 @@ const jwt_secret = "uuu"
 // add Student route
 
 router.post("/register", controller.upload, async (req, res) => {
-    // console.log('url =',req.body,req.url,req.file)  
+    // console.log('url =',req.body,req.url,req.file) 
+    console.log('register route',req.body)   
 
     const lastStudent = await users
     .findOne({}, {}, { sort: { _id: -1 } }) // Sort by the default ObjectId in descending order
@@ -169,6 +170,7 @@ dueDate4 = dueDate4.toISOString().split('T')[0]
     req.body.studentRunningBatch = [req.body.Batch]
     req.body.AllTrainer = [req.body.TrainerName]
     req.body.AllTrainerId = [req.body.TrainerID]
+    req.body.courseRunningStatus = "active"
 
     // console.log("req body =", req.body)
     try {
@@ -418,7 +420,7 @@ function convertToWords(amount) {
 // get userdata
 router.get("/getdata", async (req, res) => {
     try {
-        const userdata = await users.find().select("-password");
+        const userdata = await users.find({courseRunningStatus:"active"}).select("-password");
         // // console.log('user data =',userdata)
         res.status(200).json(userdata);
     } catch (error) {
@@ -430,7 +432,7 @@ router.get("/getdata", async (req, res) => {
 // route to get running Student
 router.get("/getAllStudent", async (req, res) => {
 
-    let allStudent = await users.find()
+    let allStudent = await users.find({courseRunningStatus:"active"})
     
     console.log('total Student =', allStudent.length)
     res.send({ "totalStudent": allStudent.length })
@@ -452,7 +454,7 @@ const checkRunningBatchStudent = (batch, runningBatch) => {
 router.get('/getNewStudent/:currentMonth',async(req,res)=>{
   
     const {currentMonth} = req.params
-    let allStudent = await users.find()
+    let allStudent = await users.find({courseRunningStatus:"active"})
 
     let newStudent = 0
     allStudent.map(data=>{
@@ -475,7 +477,7 @@ router.get('/getNewTrainerStudent/:id',async(req,res)=>{
     let currentMonth = req.header("month")
     console.log("trainer id =",currentMonth,id)
     
-    let allStudent = await users.find({TrainerID:id})
+    let allStudent = await users.find({TrainerID:id, courseRunningStatus:"active"})
 
     let newStudent = []
 
@@ -598,7 +600,7 @@ router.get('/getNewCounselorStudent/:id',async(req,res)=>{
     // console.log("id =",currentMonth,id)
     console.log("month =",currentMonth)
     
-    let allStudent = await users.find({CounselorID:id})
+    let allStudent = await users.find({CounselorID:id,courseRunningStatus:"active"})
 
     let newStudent = []
 
@@ -744,7 +746,7 @@ router.get("/getStudentByCounselor/:id", async (req, res) => {
     const {id} = req.params
  
     try {
-        const userdata = await users.find({CounselorID:id});
+        const userdata = await users.find({CounselorID:id,courseRunningStatus:"active"});
         res.status(200).json(userdata);
     } catch (error) {
         res.status(500).json(error);
@@ -873,21 +875,44 @@ router.post("/updateuser/:id", async (req, res) => {
 });
 
 // delete student
+// router.delete("/deleteuser/:id", async (req, res) => {
+//     try {
+//         const { id } = req.params;
+
+//         const deletedUser = await users.findByIdAndDelete(id);
+        
+//         let {Name,Number,Pname,Pnumber,BatchStartDate,Course,Counselor,Fees,feesStatus,remainingFees,TrainerName,BatchTiming,BatchMode,Payment,Remark,file,url,status,password,email,Batch,RegistrationFees,RegistrationDate,CollectionDate,DueDate,EnrollmentNo,TrainerID,CounselorID,paymentStatus,lastCollectionDate}
+//           = deletedUser
+
+//           console.log('name=',Name,Number,Pname,Pnumber,BatchStartDate,Course,Counselor,Fees,feesStatus,remainingFees,TrainerName,BatchTiming,BatchMode,Payment,Remark,file,url,status,password,email,Batch,RegistrationFees,RegistrationDate,CollectionDate,DueDate,EnrollmentNo,TrainerID,CounselorID,paymentStatus,lastCollectionDate)
+
+//      const old = await oldStudent.create( {Name,Number,Pname,Pnumber,BatchStartDate,Course,Counselor,Fees,feesStatus,remainingFees,TrainerName,BatchTiming,BatchMode,Payment,Remark,file,url,status,password,email,Batch,RegistrationFees,RegistrationDate,CollectionDate,DueDate,EnrollmentNo,TrainerID,CounselorID,paymentStatus,lastCollectionDate})
+//      console.log("old user", old)
+//         res.status(200).json(deletedUser);
+//     } catch (error) {
+//         res.status(500).json(error);
+//     }
+// });
+
 router.delete("/deleteuser/:id", async (req, res) => {
+    console.log('delete user route')
     try {
         const { id } = req.params;
 
-        const deletedUser = await users.findByIdAndDelete(id);
+        const deletedUser = await users.findByIdAndUpdate(id,{$set:{courseRunningStatus:"active"}});
         
         let {Name,Number,Pname,Pnumber,BatchStartDate,Course,Counselor,Fees,feesStatus,remainingFees,TrainerName,BatchTiming,BatchMode,Payment,Remark,file,url,status,password,email,Batch,RegistrationFees,RegistrationDate,CollectionDate,DueDate,EnrollmentNo,TrainerID,CounselorID,paymentStatus,lastCollectionDate}
           = deletedUser
 
           console.log('name=',Name,Number,Pname,Pnumber,BatchStartDate,Course,Counselor,Fees,feesStatus,remainingFees,TrainerName,BatchTiming,BatchMode,Payment,Remark,file,url,status,password,email,Batch,RegistrationFees,RegistrationDate,CollectionDate,DueDate,EnrollmentNo,TrainerID,CounselorID,paymentStatus,lastCollectionDate)
 
-     const old = await oldStudent.create( {Name,Number,Pname,Pnumber,BatchStartDate,Course,Counselor,Fees,feesStatus,remainingFees,TrainerName,BatchTiming,BatchMode,Payment,Remark,file,url,status,password,email,Batch,RegistrationFees,RegistrationDate,CollectionDate,DueDate,EnrollmentNo,TrainerID,CounselorID,paymentStatus,lastCollectionDate})
-     console.log("old user", old)
+    //  const old = await oldStudent.create( {Name,Number,Pname,Pnumber,BatchStartDate,Course,Counselor,Fees,feesStatus,remainingFees,TrainerName,BatchTiming,BatchMode,Payment,Remark,file,url,status,password,email,Batch,RegistrationFees,RegistrationDate,CollectionDate,DueDate,EnrollmentNo,TrainerID,CounselorID,paymentStatus,lastCollectionDate})
+    //  console.log("old user", old)
         res.status(200).json(deletedUser);
-    } catch (error) {
+
+    } 
+    catch (error) {
+        console.log('error =',error.message)
         res.status(500).json(error);
     }
 });
@@ -1173,7 +1198,7 @@ router.get("/document", async (req, res) => {
 //  Student-profile
 router.get("/studentpro", async (req, res) => {
     try {
-        const student = await users.find({});
+        const student = await users.find({courseRunningStatus:"active"});
         // console.log('student =', student)
         res.send(student);
     } catch (error) {
@@ -1210,6 +1235,7 @@ router.post("/updatePaymentStatus/:id", async (req, res) => {
 router.post("/updatelastCollectionDate/:id", async (req, res) => {
     const { id } = req.params
     try {
+
         let paymentStatus = await users.updateOne({ _id: id }, { $set: { lastCollectionDate: req.body.lastCollectionDate, paymentStatus: req.body.paymentStatus } }, { upsert: true })
         // console.log("lastcollectionDate status =",paymentStatus)
 
@@ -1222,7 +1248,7 @@ router.post("/updatelastCollectionDate/:id", async (req, res) => {
 //Student-profile display in Trainer Component
 router.get("/pro", async (req, res) => {
     try {
-        const trainers = await users.find({});
+        const trainers = await users.find({courseRunningStatus:"active"});
         res.send(trainers);
     } catch (error) {
         res.status(500).json(error);
@@ -1395,7 +1421,7 @@ router.post("/student", async (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
 
-        const username = await users.findOne({ email: email, password: password }).lean();
+        const username = await users.findOne({ email: email, password: password,courseRunningStatus:"active" }).lean();
         // // console.log('status =', username.status, username)
 
         if (username) {
@@ -1434,7 +1460,7 @@ router.post("/updatePassword/student", async (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
 
-        const username = await users.findOne({ email: email });
+        const username = await users.findOne({ email: email,courseRunningStatus:"active" });
         // // console.log('status =', username.status, username)
 
         if (username) {
@@ -2176,7 +2202,7 @@ router.post('/sendmail', async (req, res) => {
 router.post('/resetpassword', async (req, res) => {
     // // console.log('email =', req.body.email)
     try {
-        const username = await users.findOne({ email: req.body.email });
+        const username = await users.findOne({ email: req.body.email,courseRunningStatus:"active" });
         // // console.log('email username =', username)
         if (username) {
             resetpassword(req, res)
@@ -2217,7 +2243,7 @@ router.post('/newpassword', fetchuser, async (req, res) => {
         let user = await fetchuserModel.findOne({ email: req.user.email });
 
         if (user) {
-            let userPassword = await users.updateOne({ email: req.user.email }, { $set: { password: req.body.newpassword } })
+            let userPassword = await users.updateOne({ email: req.user.email,courseRunningStatus:"active" }, { $set: { password: req.body.newpassword } })
 
             res.send({ "userpassword": userPassword })
         }
@@ -2856,7 +2882,7 @@ router.post('/fetchstudent', fetchuser, async (req, res) => {
 
     try {
         // // console.log("try fecth run")
-        let studentData = await users.findOne({ _id: req.user.id })
+        let studentData = await users.findOne({ _id: req.user.id,courseRunningStatus:"active" })
         // // console.log('student data =',studentData)
 
         if (studentData) {
@@ -3620,7 +3646,7 @@ router.post('/getUpcomingDemoesByCounselor', async (req, res) => {
 
 router.post('/getStudentByTrainer', async (req, res) => {
     try {
-        let filterStudent = await users.find({ TrainerID: req.body.TrainerId }).select("-password -email -Number -Fees -Payment -status")
+        let filterStudent = await users.find({ TrainerID: req.body.TrainerId,courseRunningStatus:"active" }).select("-password -email -Number -Fees -Payment -status")
         res.send({ "status": "ok", "data": filterStudent })
     }
     catch (error) {
@@ -3673,7 +3699,7 @@ router.get('/getRunningBatchStudent', async (req, res) => {
 const batch = req.header("batch")
 console.log('batch = ',batch)
     try {
-        let studentRunningBatches = await users.find({studentRunningBatch:batch})
+        let studentRunningBatches = await users.find({studentRunningBatch:batch,courseRunningStatus:"active"})
         // console.log("running student =",studentRunningBatches)
         res.send({ "status": "active", "studentRunningBatches": studentRunningBatches })
     }
@@ -3747,7 +3773,7 @@ router.post('/updateBatch/:id', async (req, res) => {
     try {
     
         let updateBatch = await runningBatch.findByIdAndUpdate({_id:id},{$set:details.tempInpVal})
-        let batchStudent = await users.find({studentRunningBatch:details.tempInpVal.previousBatch})
+        let batchStudent = await users.find({studentRunningBatch:details.tempInpVal.previousBatch,courseRunningStatus:"active"})
 
         for(let i=0; i<batchStudent.length; i++){
             let filterBatch = getTotalBatch(batchStudent[i],details.tempInpVal)
@@ -3933,7 +3959,7 @@ router.get("/counselorStudent/:id", async (req, res) => {
     // console.log('counselor =',req.headers.counselorname, req.headers)
     try {
 
-        const studentData = await users.find({ CounselorID: id });
+        const studentData = await users.find({ CounselorID: id,courseRunningStatus:"active" });
         // // console.log("user individual =", userindividual);
         res.send({ "status": "active", "counselorStudent": studentData });
     } catch (error) {
@@ -4198,8 +4224,17 @@ router.delete("/deleteFee/:id", async (req, res) => {
     }
 });
 
+
+// old student get Route
+
+// router.get("/getOldStudent",async(req,res)=>{
+//     let old = await oldStudent.find()  
+//     res.send({"oldStudent":old})
+// })
+
+
 router.get("/getOldStudent",async(req,res)=>{
-    let old = await oldStudent.find()  
+    let old = await users.find({courseRunningStatus:"deactive"})  
     res.send({"oldStudent":old})
 })
 
@@ -4266,7 +4301,7 @@ router.post("/moveStudent",async(req,res)=>{
 
     let updateStudent = await users.findByIdAndUpdate({_id:id}, {$set:{studentRunningBatch:runningBatchstudent,studentOldBatch:oldBatchStudent, AllTrainer:AllTrainer, AllTrainerId:AllTrainerId, OldTrainer:oldTrainer, OldTrainerId:oldTrainerId}})
 
-    console.log('old batch =',runningBatchstudent,oldBatchStudent)
+    // console.log('old batch =',runningBatchstudent,oldBatchStudent)
     res.send({"oldBatches":oldBatchStudent,"newBatches":runningBatchstudent})
 
 })

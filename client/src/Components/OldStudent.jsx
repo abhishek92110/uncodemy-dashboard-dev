@@ -204,7 +204,7 @@ export default function OldStudent() {
           <div className="row">
             <div className="col-lg-12">
               <div className="card w-80">
-                <div className="card-body">
+                <div className="">
                   <div className="email-right  ml-sm-4 ml-sm-0">
                     <div className="row">
                       <div className="col-md-12">

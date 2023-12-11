@@ -19,8 +19,14 @@ function FeeTable() {
   const [allStudent, setAllStudent] = useState()
   const navigate = useNavigate();
   const [runningBatch, setRunningBatch] = useState()
+  const [timeValue,setTimeValue] = useState()
   const [counselor, setCounselor]  = useState()
   const [currentStudent, setCurrentStudent] = useState()
+  const [currentDate, setCurrentDate] = useState()
+  const [rangeDate, setRangeDate]=  useState({
+    startDate:"",
+    endDate:""
+  })
   const [Fees, setFees] = useState({
     totalFees:"",
     notifyFees:"",
@@ -52,6 +58,58 @@ function FeeTable() {
       setFeedata(data)
     }
   }
+
+
+  const setStartEndate = (timeValue) => {
+    let today = new Date();
+    let startDate, endDate;
+  
+    if (timeValue === "Today") {
+      startDate = today;
+      endDate = today;
+    } else if (timeValue === "Yesterday") {
+      today.setDate(today.getDate() - 1); // Subtract 1 day to get yesterday
+      startDate = today;
+      endDate = today;
+    } else if (timeValue === "Last Week") {
+      endDate = new Date(); // Current date
+      startDate = new Date();
+      startDate.setDate(endDate.getDate() - 7); // Subtract 7 days to get a week ago
+    } else {
+      // Handle the case when time is not recognized
+      console.error("Invalid time option");
+      return;
+    }
+  
+
+  
+
+    const startDateStr = formatDate(startDate);
+    const endDateStr = formatDate(endDate);
+    setRangeDate({...rangeDate, ["startDate"]:startDateStr, ["endDate"]:endDateStr})
+    console.log("start date and end date =",startDateStr, endDateStr)
+  
+    return { startDate: startDateStr, endDate: endDateStr };
+  };
+
+  const setFromTime =(fromTime)=>{
+    const startDateStr =  formatDate(new Date(fromTime))
+    setRangeDate({...rangeDate, ["startDate"]:startDateStr})
+    console.log("from time ",startDateStr)
+    
+   }
+   const setToTime =(toTime)=>{
+    const endDateStr = formatDate(new Date(toTime))
+    setRangeDate({...rangeDate, ["endDate"]:endDateStr})
+    console.log("to time ",endDateStr)
+   }
+
+   const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('default', { month: 'short' });
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   const deleteuser = async (id) => {
     Swal.fire({
@@ -115,20 +173,8 @@ function FeeTable() {
 
   const setMonth =(month)=>{
 
-    console.log('month =',month.toString(), monthName[month-1],currentMonth)
+    console.log('month =',month,month.toString(), monthName[month-1],currentMonth)
     setFilteredMonth(month.toString())
-
-    if(monthName[month-1]==currentMonth){
-      
-      console.log('current month =',month,new Date().getDate())
-
-    }
-else
-{
-  const lastDayOfMonth = new Date(currentYear, month, 0);
-  let lastDate = lastDayOfMonth.getDate();
-  console.log("last date =",lastDate)
-}
   
   }
 
@@ -164,6 +210,10 @@ else
     getTrainerdata();
     getBatch();
     getCounselor();
+
+    let current = new Date().toISOString().split('T')[0];    
+    setRangeDate({...rangeDate,["endDate"]:current,["startDate"]:current})
+    setCurrentDate(current)
 
   }, [])
 
@@ -234,11 +284,23 @@ else
 
   const SearchStudentFees = async()=>{
 
-    console.log("filter month =",filteredMonth)
-    let studentFees =  ContextValue.getStudentMonthFeeStatus(filteredMonth,(new Date().getFullYear))
+    console.log("filter month range data=",rangeDate) 
     
+    let getRangeFees = await fetch("http://localhost:8000/getRangeFees",{
+      method:"GET",
+      headers:{
+        "startDate":rangeDate.startDate,
+        "endDate":rangeDate.endDate
+      }
+    })
 
-    console.log("student fees =",studentFees)
+    getRangeFees = await getRangeFees.json()
+
+    console.log("range fees =",getRangeFees)
+
+  }
+
+  const SearchMonthFees = ()=>{
 
   }
 
@@ -267,6 +329,37 @@ else
           <button className='filter-btn' onClick={SearchStudentFees}>Search</button>
 
           </div> */}
+
+<div className="d-flex j-c-initial c-gap-40">
+                  <select
+                        id="exampleInputPassword1"
+                        type="select"
+                        name="Course"
+                        class="custom-select mr-sm-2"
+                        onChange={e =>{ setTimeValue(e.target.value);setStartEndate(e.target.value)}}
+                    >
+                        <option disabled selected>--select Time--</option>
+                    
+                                <option value="Today">Today</option>
+                                <option value="Yesterday">Yesterday</option>
+                                <option value="Last Week">Last Week</option>
+                                <option value="Select Range">Select Range</option>
+                        
+                        
+                    </select>
+
+                     {timeValue==="Select Range" && 
+                     <>
+                     <label>From</label>
+                      <input type="date" class="custom-select mr-sm-2" max={rangeDate.endDate} onChange={e=>setFromTime(e.target.value)}></input>
+                      <label>To</label>
+                      <input type="date" class="custom-select mr-sm-2" max={currentDate} min={rangeDate.startDate} onChange={e=>setToTime(e.target.value)}></input>
+                      </>}
+
+          <button className='filter-btn' onClick={SearchStudentFees}>Search</button>
+
+          </div>
+
           <div className='flex-row j-c-space-between'>
             <div className='flex-row'>
               <div className="batch-thumb thumb">
@@ -308,6 +401,9 @@ else
               </div>
               <button className='filter-btn' onClick={filterStudent}>Filter</button>
               </div>
+
+         
+              
               <div className='d-grid col-3'>
                 <strong className='text-dark'>Total Expected Fees</strong>
                 <span>:</span>
@@ -325,6 +421,8 @@ else
             
 
               </div>
+
+        
            
           </div>
 
