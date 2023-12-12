@@ -277,8 +277,8 @@ router.get('/getTotalFees',async(req,res)=>{
 })
 
 // get counselor total fees router
-router.get('/getCounselorTotalFees/:id',async(req,res)=>{
-    const {id} = req.params
+router.get('/getCounselorTotalFees',async(req,res)=>{
+    const id  = req.header("id")
     let totalFees = await StudentFee.find({CounselorId:id});    
 
     let totalAmount = 0;
@@ -299,8 +299,9 @@ router.get('/getCounselorTotalFees/:id',async(req,res)=>{
 // get counselor new fees router 
 
 router.get('/getCounselorNewTotalFees/:id',async(req,res)=>{
-    const {id} = req.params
+   
     const month = req.header("month")
+    const id = req.header("id")
     let totalFees = await StudentFee.find({CounselorId:id,month:month});    
 
     let totalAmount = 0;
@@ -465,16 +466,16 @@ router.get('/getNewStudent/:currentMonth',async(req,res)=>{
             newStudent = newStudent+1
         }
     })
-    console.log('new Student =',newStudent)
+    // console.log('new Student =',newStudent)
     res.send({"newStudent":newStudent})
 })
 
 
 // route get trainer new student
 
-router.get('/getNewTrainerStudent/:id',async(req,res)=>{
-    const {id} = req.params
+router.get('/getNewTrainerStudent',async(req,res)=>{
     let currentMonth = req.header("month")
+    const id  = req.header("id")
     console.log("trainer id =",currentMonth,id)
     
     let allStudent = await users.find({TrainerID:id, courseRunningStatus:"active"})
@@ -489,7 +490,7 @@ router.get('/getNewTrainerStudent/:id',async(req,res)=>{
            newStudent.push(data)
         }
     })
-    console.log('new Student =',newStudent)
+    // console.log('new Student =',newStudent)
     res.send({"newStudent":newStudent})
 })
 
@@ -593,10 +594,10 @@ const updatePaymentStatus = async (status, id) => {
 
   }
 
-router.get('/getNewCounselorStudent/:id',async(req,res)=>{
+router.get('/getNewCounselorStudent',async(req,res)=>{
     console.log("new counselor student")
-    const {id} = req.params
     let currentMonth = req.header("month")
+    let id = req.header("id")
     // console.log("id =",currentMonth,id)
     console.log("month =",currentMonth)
     
@@ -612,7 +613,7 @@ router.get('/getNewCounselorStudent/:id',async(req,res)=>{
            newStudent.push(data)
         }
     })
-    console.log('new Student =',newStudent)
+    // console.log('new Student =',newStudent)
     res.send({"newStudent":newStudent})
 })
 
@@ -680,8 +681,8 @@ router.post("/registerStudent", async (req, res) => {
 });
 
 // get counselor registtartion router
-router.get('/getCounselorRegisterStudent/:id',async(req,res)=>{
-    const {id} = req.params   
+router.get('/getCounselorRegisterStudent',async(req,res)=>{
+    const id  = req.header("id")   
 
     try {
         const userdata = await registerStudent.find({CounselorId:id});
@@ -698,8 +699,9 @@ router.get('/getCounselorRegisterStudent/:id',async(req,res)=>{
 
 
 router.get('/getCounselorNewRegisterStudent/:id',async(req,res)=>{
-    const {id} = req.params   
+     
     const month = req.header('month')
+    const id = req.header('id')
 
     try {
         const userdata = await registerStudent.find({CounselorId:id});
@@ -731,13 +733,17 @@ router.get("/getregisterStudent", async (req, res) => {
 });
 
 router.post("/getStudentByCounselor", async (req, res) => {
-    console.log("get student =", req.body)
+    console.log("get student counselor route =", req.body)
     try {
+
         const userdata = await users.find(req.body);
+
+        
+        console.log("get counselor student =", userdata)
         res.status(200).json(userdata);
 
-        // console.log("get counselor student =", userdata)
-    } catch (error) {
+    } 
+    catch (error) {
         res.status(500).json(error);
     }
 })
@@ -3513,10 +3519,10 @@ router.get('/getNewDemoesByTrainer/:id', async (req, res) => {
         res.send(error.message)
     }
 })
-router.get('/getNewDemoesByCounselor/:id', async (req, res) => {
+router.get('/getNewDemoesByCounselor', async (req, res) => {
     let totalCandidate = []
     let totalCandidateData = []
-    const { id } = req.params
+    const id  = req.header("id")
     console.log("new demoes route", id)
     const month = req.header("month")
     console.log("month and id =",id,month)
@@ -3682,9 +3688,9 @@ router.get('/getrunningBatchbyBatchName', async (req, res) => {
 })
 
 
-router.get('/getrunningBatchByTrainer/:id', async (req, res) => {
+router.get('/getrunningBatchByTrainer', async (req, res) => {
 
-const {id} = req.params
+    const id  = req.header("id")
     try {
         let trainerRunningBatches = await runningBatch.find({"TrainerID":id})
         res.send({ "status": "active", "trainerRunningBatches": trainerRunningBatches })
@@ -4081,7 +4087,7 @@ const updateDueDate = async (collection, student, id, remainingFees,paidFees) =>
    else{
     
     let duedate
-    let minimunFees
+    let minimumFees 
 
     // if(paidFees>=student.Installment && paidFees<student.Installment*2){
     // console.log("if 1 =",paidFees,student.Installment)
@@ -4089,12 +4095,12 @@ const updateDueDate = async (collection, student, id, remainingFees,paidFees) =>
     // let instString = (student.Installment).toString()
 
     //     duedate = student.InstallmentDate[instString]
-    //     minimunFees = student.Installment-paidFees
+    //     minimumFees  = student.Installment-paidFees
     // }
     // else if(paidFees>=student.Installment*2 && paidFees<student.Installment*3){
         
     //     let instString = (student.Installment*2).toString()
-    //     minimunFees = (student.Installment*2)-paidFees
+    //     minimumFees  = (student.Installment*2)-paidFees
     //     console.log("if 2 =",paidFees,student.Installment,student.InstallmentDate,student.InstallmentDate)
 
     //     duedate = student.InstallmentDate[instString]
@@ -4102,14 +4108,14 @@ const updateDueDate = async (collection, student, id, remainingFees,paidFees) =>
     // else if(paidFees>=student.Installment*3 && paidFees<student.Installment*4){
     // console.log("if 3 =",paidFees,student.Installment)
 
-    // minimunFees = (student.Installment*3)-paidFees
+    // minimumFees  = (student.Installment*3)-paidFees
     // let instString = (student.Installment*3).toString()
 
     //     duedate = student.InstallmentDate[instString]
     // }
     // else if(paidFees>=student.Installment*4){
 
-    //  minimunFees = (student.Installment*4)-paidFees
+    //  minimumFees  = (student.Installment*4)-paidFees
     // console.log("if 4 =",paidFees,student.Installment*2)
 
     //     duedate = "Fees Completeted"
@@ -4121,12 +4127,12 @@ const updateDueDate = async (collection, student, id, remainingFees,paidFees) =>
         let instString = (student.Installment).toString()
     
             duedate = student.InstallmentDate[instString]
-            minimunFees = student.Installment-paidFees
+            minimumFees  = student.Installment-paidFees
         }
         else if(paidFees<student.Installment*2 && paidFees>=student.Installment){
             
             let instString = (student.Installment*2).toString()
-            minimunFees = (student.Installment*2)-paidFees
+            minimumFees  = (student.Installment*2)-paidFees
             console.log("if 2 =",paidFees,student.Installment,student.InstallmentDate,student.InstallmentDate)
     
             duedate = student.InstallmentDate[instString]
@@ -4134,7 +4140,7 @@ const updateDueDate = async (collection, student, id, remainingFees,paidFees) =>
         else if(paidFees<student.Installment*3 && paidFees>=student.Installment*2){
         console.log("if 3 =",paidFees,student.Installment)
     
-        minimunFees = (student.Installment*3)-paidFees
+        minimumFees  = (student.Installment*3)-paidFees
         let instString = (student.Installment*3).toString()
     
             duedate = student.InstallmentDate[instString]
@@ -4144,14 +4150,14 @@ const updateDueDate = async (collection, student, id, remainingFees,paidFees) =>
 
         console.log("if 3 =",paidFees,student.Installment)
     
-        minimunFees = (student.Installment*4)-paidFees
+        minimumFees  = (student.Installment*4)-paidFees
         let instString = (student.Installment*4).toString()
     
         duedate = student.InstallmentDate[instString]
         }
         else if(paidFees>=student.Installment*4){
     
-         minimunFees = (student.Installment*4)-paidFees
+         minimumFees  = (student.Installment*4)-paidFees
         console.log("if 4 =",paidFees,student.Installment*2)
     
             duedate = "Fees Completeted"
@@ -4159,7 +4165,7 @@ const updateDueDate = async (collection, student, id, remainingFees,paidFees) =>
 
     const updateUser = await users.updateOne(
         { _id: id },
-        { $set: { paymentStatus: "paid", DueDate: duedate, minimumFees : minimunFees} },
+        { $set: { paymentStatus: "paid", DueDate: duedate, minimumFees : minimumFees } },
         { upsert: true }
     );
     
@@ -4192,7 +4198,8 @@ router.post("/FeeDetail/:id", async (req, res) => {
         // console.log("update user =",updateduser)
 
         res.status(200).json(updateduser);
-    } catch (error) {
+    } catch (error) 
+    {
         // console.log("error =",error.message)
 
         res.status(500).json(error);

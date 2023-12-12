@@ -70,9 +70,9 @@ export default function TrainerDashboard() {
         getTrainerData(status.data)
         localStorage.setItem('trainerData', JSON.stringify(status.data))
         localStorage.setItem('trainerId', status.data._id)
-        getBatch(status.data._id)
+        getBatch(status.data.code)
         getTrainerUpcoming(status.data.code)
-        getNewTrainerStudent(status.data._id)
+        getNewTrainerStudent(status.data.code)
         setCourse(status.data.Course)
       }
       else {
@@ -103,7 +103,7 @@ export default function TrainerDashboard() {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ TrainerId: trainerData._id })
+      body: JSON.stringify({ TrainerId: trainerData.code })
     });
 
     const responseData = await response.json();

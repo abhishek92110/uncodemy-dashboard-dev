@@ -1685,6 +1685,7 @@ pre {
     vertical-align: top;
     border-top: 1px solid #EEEEEE; }
   .table thead th {
+    padding: 5px;
     vertical-align: bottom;
     border-bottom: 2px solid #EEEEEE; }
   .table tbody + tbody {
@@ -24472,9 +24473,10 @@ margin: 70px 0 0 0; }
   .recentOrderTable table thead th {
     font-size: 12px; }
   .recentOrderTable table tbody td {
+    padding:5px;
     color: #454545;
     font-weight: 500;
-    line-height: 40px; }
+    line-height: 25px; }
     [data-theme-version="dark"] .recentOrderTable table tbody td {
       color: #828690; }
     .recentOrderTable table tbody td img {

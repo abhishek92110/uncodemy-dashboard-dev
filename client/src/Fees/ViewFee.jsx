@@ -283,7 +283,7 @@ import Swal from 'sweetalert2'
             <div className='sidebar-main-container'>
                 <Sidebar />
                 <div className="container-fluid right-side-container">
-                    <h2 className="text-left">Fee Chart</h2>
+                    <h2 className="text-left">Fees</h2>
 
                     <div className="d-flex j-c-initial c-gap-40">
                   <select

@@ -918,6 +918,10 @@ h3 {
   opacity: 0.5;
 }
 
+.b-none{
+  border: none;
+}
+
 .fees-month-thumb{
   margin: 0 0 30px 0 !important;
 }

@@ -71,17 +71,17 @@ export default function Home() {
         getdata(status.data.counselorNo)
         localStorage.setItem('counselorId',status.data._id)
         setCounselor(status.data)
-        getNewCounselorStudent(status.data._id)
-        getRegisterStudent(status.data._id)
+        getNewCounselorStudent(status.data.counselorNo)
+        getRegisterStudent(status.data.counselorNo)
     
         console.log('counselor id from func before= ',status.data.counselorNo,status.data)
         
         getDemoCounselorStudent(status.data.counselorNo)
         getNewCounselorDemo(status.data.counselorNo)
         getCounselorUpcoming(status.data.counselorNo)
-        getNewRegisterStudent(status.data._id)
-        getCounselorTotalFees(status.data._id)
-        getCounselorNewTotalFees(status.data._id)
+        getNewRegisterStudent(status.data.counselorNo)
+        getCounselorTotalFees(status.data.counselorNo)
+        getCounselorNewTotalFees(status.data.counselorNo)
         // receivemessage(status.data._id)
         // localStorage.setItem('studentData', JSON.stringify(status.data))
       }
@@ -100,6 +100,8 @@ export default function Home() {
 
 setTodayDemo(counselorUpcoming.Demo)
 setTodayDemoStudent(counselorUpcoming.totalDemoStudent)
+
+console.log("counselor upcoming =",counselorUpcoming)
   }
 
   const getCounselorNewTotalFees = async(id)=>{
@@ -456,7 +458,7 @@ setTodayDemoStudent(counselorUpcoming.totalDemoStudent)
                     <span className="mr-3">
                       <i className="la la-dollar" />
                     </span>
-                    <div className="media-body text-white" onClick={e=>moveToAllDemo(counselor._id)}>
+                    <div className="media-body text-white" onClick={e=>moveToAllDemo(counselor.counselorNo)}>
                       <p className="mb-1">Total Demo</p>
                       <h3 className="text-white">{allDemo && allDemo.length}</h3>
                       {/* <div className="progress mb-2 bg-white">
@@ -478,7 +480,7 @@ setTodayDemoStudent(counselorUpcoming.totalDemoStudent)
                     <span className="mr-3">
                       <i className="la la-dollar" />
                     </span>
-                    <div className="media-body text-white" onClick={e=>moveToNewDemo(counselor._id)}>
+                    <div className="media-body text-white" onClick={e=>moveToNewDemo(counselor.counselorNo)}>
                       <p className="mb-1">New Demo</p>
                       <h3 className="text-white">{newDemo && newDemo.length}</h3>
                       {/* <div className="progress mb-2 bg-white">
@@ -645,11 +647,23 @@ setTodayDemoStudent(counselorUpcoming.totalDemoStudent)
                               <tr>
                                 <td>{data.EnrollmentNo}</td>
                                 <td>{data.Name}</td>
-                                <td className='d-flex flex-col'>{data.AllTrainer?data.AllTrainer.map(data=>{
-                                  return(
-                                    <td className='border-0'>{data}</td>
-                                  )
-                                }):data.TrainerName}</td>
+                                <td>
+                                    {data.AllTrainer.length <= 1 ? (
+                                      <td className="border-0">
+                                        {data.AllTrainer[0]}
+                                      </td>
+                                    ) : (
+                                      <select className="d-flex flex-col b-none">
+                                        {data.AllTrainer &&
+                                          data.AllTrainer.map((trainer,index) => (
+                                            <option key={trainer} disabled selected={index===0?true:false}>
+                                              {trainer}
+                                            </option>
+                                          ))}
+                                      </select>
+                                   
+                                    )}
+                                       </td>
                                 <td>{data.BatchStartDate}</td>
                                 <td>{data.Course}</td>
                                 <td>{data.Fees}</td>

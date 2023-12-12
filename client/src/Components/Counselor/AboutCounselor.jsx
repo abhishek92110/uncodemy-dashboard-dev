@@ -3,7 +3,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MessageIcon from '@mui/icons-material/Message';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import Header from '../Header';
 import { StudentContext } from '../../context/StudentState';
@@ -14,15 +14,18 @@ import NewDemo from '../Trainers/NewDemo';
 export default function AboutCounselor() {
   let ContextValue = useContext(StudentContext);
   const navigate = useNavigate();
+  const location = useLocation();
   const [allCounselorDemo, setAllCounselorDemo] = useState()
 
   document.title = "StudentDashboard - Admin panel"
 
-  const {id} = useParams()
-  console.log("params id =",id)
+  const {counselor} = location.state
+  // const {id} = useParams()
+
+  // console.log("params id =",id)
 
 useEffect(()=>{
-    getCounsellor(id)
+    getCounsellor(counselor._id)
 },[])
 
   const navigation = useNavigate()
@@ -45,7 +48,7 @@ useEffect(()=>{
   const [user, setUser] = useState("student")
   const [currentStudent, setCurrentStudent] = useState()
   const [registerStudent, setRegisterStudent] = useState()
-  const [counselor, setCounselor] = useState()
+  // const [counselor, setCounselor] = useState()
   const [allDemo, setAllDemo] = useState()
   const [allDemoStudent, setAllDemoStudent] = useState()
   const [newDemo, setNewDemo] = useState()
@@ -59,16 +62,16 @@ useEffect(()=>{
     console.log('get counseolor')
     try {
       const status = await ContextValue.checkCounsellorById(id);
-      console.log('counselor id =',id)
+      // console.log('counselor id =',id)
       
             console.log('status of counselor =', status);
-           setCounselor(status.data)
-           getCounselorStudent(status.data._id)
-           getNewCounselorStudent(status.data._id)
-           getRegisterStudent(status.data._id)
-           getDemoCounselorStudent(status.data._id)
-           getNewCounselorDemo(status.data._id)
-           getCounselorUpcoming(status.data._id)
+          //  setCounselor(status.data)
+           getCounselorStudent(status.data.counselorNo)
+           getNewCounselorStudent(status.data.counselorNo)
+           getRegisterStudent(status.data.counselorNo)
+           getDemoCounselorStudent(status.data.counselorNo)
+           getNewCounselorDemo(status.data.counselorNo)
+           getCounselorUpcoming(status.data.counselorNo)
 
     } catch (error) {
       console.error('Error fetching admin status:', error);
@@ -76,13 +79,18 @@ useEffect(()=>{
   }
 
   const getCounselorStudent = async(id)=>{
-    let CounselorStudent = await fetch(`http://localhost:8000/counselorStudent/${id}`, {
-        method: "GET",
-      });
+
+    console.log('id =',id)
+
+    let CounselorStudent = await fetch('http://localhost:8000/getStudentByCounselor', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ CounselorID: id })
+    })
       CounselorStudent = await CounselorStudent.json()
-      setCurrentStudent(CounselorStudent.counselorStudent)
-      setAllStudent(CounselorStudent.counselorStudent)
-      console.log("student counselor =",CounselorStudent.counselorStudent)
+      setCurrentStudent(CounselorStudent)
+      setAllStudent(CounselorStudent)
+      console.log("student counselor =",CounselorStudent)
     }
 
   const showMessagedialog = async (id) => {
@@ -113,33 +121,35 @@ useEffect(()=>{
     let fetchData = await sendData.json();
     console.log("data = ", fetchData)
   }
-  const getdata = async (counselorName) => {
+  // const getdata = async (counselorName) => {
 
-    let studentData = await fetch('http://localhost:8000/getStudentByCounselor', {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ Counselor: counselorName })
-    })
+  //   let studentData = await fetch('http://localhost:8000/getStudentByCounselor', {
+  //     method: 'POST',
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ CounselorID: counselorName })
+  //   })
 
-    studentData = await studentData.json()
-    setAllStudent(studentData)
-    console.log('student data =', studentData)
-    localStorage.setItem('couselorStudent',JSON.stringify(studentData))
+  //   studentData = await studentData.json()
+  //   setAllStudent(studentData)
+  //   console.log('student data =', studentData)
+  //   localStorage.setItem('couselorStudent',JSON.stringify(studentData))
 
-    // total student new student
-      setAllStudent(studentData)
-      setAllStudentData(studentData)
-      setCurrentStudent(studentData)
+  //   // total student new student
+  //     setAllStudent(studentData)
+  //     setAllStudentData(studentData)
+  //     setCurrentStudent(studentData)
 
 
 
-  }
+  // }
 
   const getCounselorUpcoming = async(id)=>{
+
     let counselorUpcoming = await ContextValue.counselorUpcomimgDemo(id)
 
-setDemoList(counselorUpcoming.Demo)
-setDemoStudentData(counselorUpcoming.totalDemoStudent)
+    setDemoList(counselorUpcoming.Demo)
+    setDemoStudentData(counselorUpcoming.totalDemoStudent)
+    
   }
 
 
@@ -205,7 +215,7 @@ setDemoStudentData(counselorUpcoming.totalDemoStudent)
               'Your file has been deleted.',
               'success'
             )
-            getdata("Anam");
+            // getdata("Anam");
           }
         }).catch(error => {
           Swal.fire({
@@ -498,7 +508,23 @@ setDemoStudentData(counselorUpcoming.totalDemoStudent)
                             <tr>
                               <td>{data.EnrollmentNo}</td>
                               <td>{data.Name}</td>
-                              <td>{data.TrainerName}</td>
+                              <td>
+                                    {data.AllTrainer.length <= 1 ? (
+                                      <td className="border-0">
+                                        {data.AllTrainer[0]}
+                                      </td>
+                                    ) : (
+                                      <select className="d-flex flex-col b-none">
+                                        {data.AllTrainer &&
+                                          data.AllTrainer.map((trainer,index) => (
+                                            <option key={trainer} disabled selected={index===0?true:false}>
+                                              {trainer}
+                                            </option>
+                                          ))}
+                                      </select>
+                                   
+                                    )}
+                                       </td>
                               <td>{data.BatchStartDate}</td>                             
                               <td>{data.Course}</td>
                               <td>{data.Fees}</td>

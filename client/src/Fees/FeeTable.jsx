@@ -33,6 +33,13 @@ function FeeTable() {
     collectFees:"",
     pendingFees:""
   })
+  const [statusStudent, setStatusStudent] = useState({
+    totalStudent:"",
+    notifyStudent:"",
+    paidStudent:"",
+    pendingStudent:"",
+    newAdmisionStudent:""
+  })
   let monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
   let currentMonth = monthName[((new Date().getMonth()))]
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
@@ -195,13 +202,16 @@ function FeeTable() {
     console.log('filter student =',filterStudent)
     
     setCurrentStudent(filterStudent)
+    calFees(filterStudent)
+    studentPaymentStatus(filterStudent)
   }
 
   let counselorData ={}
 
   const setCounselorData = (e)=>{
-    console.log('select index =',e.target.selectedIndex,counselorData[e.target.selectedIndex])
-    setDetail({...detail,["counselor"]:counselorData[e.target.selectedIndex]})
+    // console.log('select index =',e.target.selectedIndex,counselorData[(e.target.selectedIndex)-1].counselorNo)
+    console.log('select index =',e.target.selectedIndex,counselor,counselor[(e.target.selectedIndex)-1].counselorNo)
+    setDetail({...detail,["counselor"]:counselor[(e.target.selectedIndex)-1].counselorNo})
   }
   useEffect(() => {
 
@@ -237,8 +247,11 @@ function FeeTable() {
     setAllStudent(student)
     setCurrentStudent(student)
     calFees(student)
+    studentPaymentStatus(student)
     
   }
+
+  // calculate fees of student 
 
   const calFees = (student)=>{
     let tempTotalFees  = 0;
@@ -261,6 +274,34 @@ function FeeTable() {
 
     console.log("total fees = ",tempTotalFees)
     setFees({...Fees,["totalFees"]:tempTotalFees,["notifyFees"]:tempNotifyFees, ["collectFees"]:tempCollectFees,["pendingFees"]:tempPendingFees})
+  }
+
+  // student status calculation
+
+  const studentPaymentStatus = (student)=>{
+    let tempTotalStudent  = student.length;
+    let tempPendingStudent = 0;
+    let tempNotificationStudent  = 0;
+    let tempPaidStudent  = 0;
+    let tempNewAdmissionStudent  = 0;
+
+    student.map(data=>{
+      
+      if(data.paymentStatus==="notification"){
+        tempNotificationStudent = tempNotificationStudent + 1
+      }
+      if(data.paymentStatus==="pending"){
+        tempPendingStudent = tempPendingStudent + 1
+      }
+      if(data.paymentStatus==="paid"){
+        tempPaidStudent = tempPaidStudent + 1
+      }
+      if(data.paymentStatus==="newAdmission"){
+        tempNewAdmissionStudent = tempNewAdmissionStudent + 1
+      }
+    })
+
+    setStatusStudent({...Fees,["totalStudent"]:tempTotalStudent,["notifyStudent"]:tempNotificationStudent, ["paidStudent"]:tempPaidStudent,["pendingStudent"]:tempPendingStudent,["newAdmisionStudent"]:tempNewAdmissionStudent})
   }
 
 
@@ -330,7 +371,7 @@ function FeeTable() {
 
           </div> */}
 
-<div className="d-flex j-c-initial c-gap-40">
+{/* <div className="d-flex j-c-initial c-gap-40">
                   <select
                         id="exampleInputPassword1"
                         type="select"
@@ -358,7 +399,7 @@ function FeeTable() {
 
           <button className='filter-btn' onClick={SearchStudentFees}>Search</button>
 
-          </div>
+          </div> */}
 
           <div className='flex-row j-c-space-between'>
             <div className='flex-row'>
@@ -377,9 +418,9 @@ function FeeTable() {
               <div className="preference-thumb thumb">
                 <label className="form-label">Counselor :</label>
                 {counselor && <select className="custom-select mr-sm-2" required name='course' onChange={(e) => setCounselorData(e)}>
-                  <option selected>Choose Course...</option>
+                  <option selected>Choose Counsellor...</option>
                   {counselor.map((data,index) => {
-                    counselorData[index+1] = data._id
+              
                     return (
                       <option value={data.Name}>{data.Name}</option>
                     )
@@ -422,7 +463,25 @@ function FeeTable() {
 
               </div>
 
-        
+
+
+              <div className='d-grid col-3'>
+                <strong className='text-dark'>Total Student</strong>
+                <span>:</span>
+                <span>{statusStudent.totalStudent}</span>
+                <strong className='text-success'>Paid Student</strong>
+                <span>:</span>
+                <span>{statusStudent.paidStudent}</span>
+                <strong className='text-danger'>Pending Student</strong>
+                <span>:</span>
+                <span>{statusStudent.pendingStudent}</span>
+                <strong className='text-warning'>In Notification</strong>
+                <span>:</span>
+                <span>{statusStudent.notifyStudent}</span>
+                <strong className='text-dark'>New Admission</strong>
+                <span>:</span>
+                <span>{statusStudent.newAdmisionStudent}</span>
+              </div>        
            
           </div>
 

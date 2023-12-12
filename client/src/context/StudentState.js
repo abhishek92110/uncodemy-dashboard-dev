@@ -168,10 +168,11 @@ const StudentState = (props) => {
   }
 
   const getTrainerRunningBatch = async (id) => {
-    let runningBatch = await fetch(`http://localhost:8000/getrunningBatchByTrainer/${id}`, {
+    let runningBatch = await fetch(`http://localhost:8000/getrunningBatchByTrainer`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "id":id
       }
     });
 
@@ -548,9 +549,9 @@ const StudentState = (props) => {
 
   const totalNewTrainerStudent = async(trainerId)=>{
     let month = (new Date().getMonth() + 1).toString().padStart(2, '0');
-    let trainerStudent = await fetch(`http://localhost:8000/getNewTrainerStudent/${trainerId}`,{
+    let trainerStudent = await fetch(`http://localhost:8000/getNewTrainerStudent/`,{
       method:'GET',
-      headers:{"month":month}
+      headers:{"month":month,"id":trainerId}
 })
 
 trainerStudent = await trainerStudent.json()
@@ -559,9 +560,9 @@ return trainerStudent.newStudent
 
   const totalNewCounselorStudent = async(counselorId)=>{
     let month = (new Date().getMonth() + 1).toString().padStart(2, '0');
-    let trainerStudent = await fetch(`http://localhost:8000/getNewCounselorStudent/${counselorId}`,{
+    let trainerStudent = await fetch(`http://localhost:8000/getNewCounselorStudent/`,{
       method:'GET',
-      headers:{"month":month}
+      headers:{"month":month,"id":counselorId}
 })
 
 trainerStudent = await trainerStudent.json()
@@ -577,19 +578,21 @@ return trainerStudent.newStudent
     return totalFees
   }
   const getCounselorTotalFees = async(id)=>{
-    let totalFees = await fetch(`http://localhost:8000/getCounselorTotalFees/${id}`,{
+    let totalFees = await fetch(`http://localhost:8000/getCounselorTotalFees`,{
       method:'GET',
+      headers:{"id":id}
 })
 
     totalFees = await totalFees.json()
     return totalFees
   }
-  const getCounselorNewTotalFees = async(id)=>{
+  const getCounselorNewTotalFees = async(id)=>
+  {
     let month = new Date().getMonth()
-    month = month+1
-    let totalFees = await fetch(`http://localhost:8000/getCounselorNewTotalFees/${id}`,{
-      method:'GET',
-      headers:{"month":month}
+    month = month + 1
+    let totalFees = await fetch(`http://localhost:8000/getCounselorNewTotalFees`,{
+    method:'GET',
+    headers:{"month":month,"id":id}
 })
 
     totalFees = await totalFees.json()
@@ -631,9 +634,9 @@ const getTrainerNewDemo = async(id,month)=>{
 }
 const getCounselorNewDemo = async(id,month)=>{
   console.log('state new demo =',month,id)
-    let counselorDemo = await fetch(`http://localhost:8000/getNewDemoesByCounselor/${id}`,{
+    let counselorDemo = await fetch(`http://localhost:8000/getNewDemoesByCounselor`,{
       method:'GET',
-      headers:{"month":month}
+      headers:{"month":month,"id":id}
     })
     counselorDemo = await counselorDemo.json()
     return counselorDemo
@@ -681,20 +684,22 @@ const getNewDemo = async(month)=>{
 
 const getCounselorRegisterStudent = async(id)=>{
   console.log('counselor register =',id)
-  let registerCounselorStudent = await fetch(`http://localhost:8000/getCounselorRegisterStudent/${id}`,{
+  let registerCounselorStudent = await fetch(`http://localhost:8000/getCounselorRegisterStudent`,{
     method:'GET',
+    headers:{"id":id}
   })
 
   registerCounselorStudent = await registerCounselorStudent.json()
   return registerCounselorStudent
 }
+
 const getCounselorNewRegisterStudent = async(id)=>{
   let month = new Date().getMonth()
   month = month+1<10?`0${month+1}`:month+1
   console.log('counselor register =',id)
-  let registerCounselorStudent = await fetch(`http://localhost:8000/getCounselorNewRegisterStudent/${id}`,{
+  let registerCounselorStudent = await fetch(`http://localhost:8000/getCounselorNewRegisterStudent`,{
     method:'GET',
-    headers:{"month":month}
+    headers:{"month":month,"id":id}
   })
 
   registerCounselorStudent = await registerCounselorStudent.json()
