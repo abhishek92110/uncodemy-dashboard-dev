@@ -11,11 +11,14 @@ const RegisterStudentAdd = () => {
   const [allcourse, setAllCourse] = useState();
   const [trainer, setTrainer] = useState();
   const [course, setCourse] = useState();
+  const [methodStatus, setMethodStatus] = useState()
   const location = useLocation();
   const { counselor } = location.state;
 
   let ContextValue = useContext(StudentContext);
+ 
   useEffect(() => {
+
     getAllCourse();
     getTrainer()
     
@@ -46,11 +49,19 @@ const RegisterStudentAdd = () => {
     Counselor: counselor.Name,
     CounselorId: counselor.counselorNo,
     RegistrationFees: "",
+    paidFees: "",
+    CourseFees:"",
     TrainerName: "",
     TrainerId: "",
     BatchMode: "",
+    PaymentMode: "",
     Remark: "",
-    status:"Process"
+    EMI:"",
+    totalInstallment:"",
+    status:"Process",
+    PaymentMethod:"",
+    joinTime:"",
+    joinDate:"",
   });
 
   const addinpdata = async (e) => {
@@ -326,7 +337,7 @@ const RegisterStudentAdd = () => {
                         </div> */}
                         <div className="col-lg-6 col-md-6 col-sm-12">
                           <div className="form-group">
-                            <label className="form-label">Registration Fees</label>
+                            <label className="form-label">Registration Amount</label>
                             <input
                               type="number"
                               value={inpval.RegistrationFees}
@@ -337,6 +348,24 @@ const RegisterStudentAdd = () => {
                                 })
                               }
                               name="RegistrationFees"
+                              class="form-control"
+                              id="exampleInputPassword1"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-lg-6 col-md-6 col-sm-12">
+                          <div className="form-group">
+                            <label className="form-label">Course Fees</label>
+                            <input
+                              type="number"
+                              onChange={(e) => 
+                                setINP({
+                                  ...inpval,
+                                  [e.target.name]: e.target.value,
+                                })
+                              }
+                              name="CourseFees"
                               class="form-control"
                               id="exampleInputPassword1"
                             />
@@ -368,6 +397,120 @@ const RegisterStudentAdd = () => {
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-12">
                           <div className="form-group">
+                            <label className="form-label">Payment Method</label>
+                            <select
+                              id="exampleInputPassword1"
+                              type="select"
+                              name="PaymentMethod"
+                              class="form-control"
+                              onChange={(e) =>{
+                                setINP({
+                                  ...inpval,
+                                  [e.target.name]: e.target.value,
+                                });setMethodStatus(e.target.value)}
+                              }
+                            >
+                              <option disabled selected>
+                                --Payment Method--
+                              </option>
+                              <option value="EMI">EMI</option>
+                              <option value="Installment">Installment</option>
+                              <option value="OTP">One Time Payment</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* Total installment and EMI getter */}
+
+                      {methodStatus==="EMI" &&  <div className="col-lg-6 col-md-6 col-sm-12">
+                          <div className="form-group">
+                            <label className="form-label">Total EMI Month</label>
+                            <input
+                              type="text"
+                              onChange={(e) =>
+                                setINP({
+                                  ...inpval,
+                                  [e.target.name]: e.target.value,
+                                  
+                                })
+                              }
+                              name="EMI"
+                              class="form-control"
+                              id="exampleInputPassword1"
+                            />
+                          </div>
+                        </div>}
+                      {methodStatus==="Installment" &&  <div className="col-lg-6 col-md-6 col-sm-12">
+                          <div className="form-group">
+                            <label className="form-label">Total Installment</label>
+                            <select
+                              id="exampleInputPassword1"
+                              type="select"
+                              name="totalInstallment"
+                              class="form-control"
+                              onChange={(e) =>{
+                                setINP({
+                                  ...inpval,
+                                  [e.target.name]: e.target.value,
+                                })}
+                              }
+                            >
+                              <option disabled selected>
+                                --Total Installment--
+                              </option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                            </select>
+                          </div>
+                        </div>}
+
+                       {methodStatus==="OTP" && <div className="col-lg-6 col-md-6 col-sm-12">
+                          <div className="form-group">
+                            <label className="form-label">Full Payment</label>
+                            <input
+                              type="number"
+                              onChange={(e) => 
+                                setINP({
+                                  ...inpval,
+                                  [e.target.name]: e.target.value,
+                                })
+                              }
+                              name="paidFees"
+                              class="form-control"
+                              id="exampleInputPassword1"
+                            />
+                          </div>
+                        </div>}
+
+                        <div className="col-lg-6 col-md-6 col-sm-12">
+                          <div className="form-group">
+                            <label className="form-label">Payment mode</label>
+                            <select
+                              id="exampleInputPassword1"
+                              type="select"
+                              name="PaymentMode"
+                              class="form-control"
+                              onChange={(e) =>
+                                setINP({
+                                  ...inpval,
+                                  [e.target.name]: e.target.value,
+                                })
+                              }
+                            >
+                              <option disabled selected>
+                                --select Payment Mode--
+                              </option>
+                              <option value="Cash">Cash</option>
+                              <option value="UPI">UPI</option>
+                            </select>
+                          </div>
+                        </div>
+
+
+                        <div className="col-lg-6 col-md-6 col-sm-12">
+                          <div className="form-group">
                             <label className="form-label">Batch Course</label>
                             {allcourse && <select
                               id="exampleInputPassword1"
@@ -384,6 +527,36 @@ const RegisterStudentAdd = () => {
                                   return <option value={data}>{data}</option>;
                                 })}
                             </select>}
+                          </div>
+                        </div>
+
+                        <div className="col-lg-6 col-md-6 col-sm-12">
+                          <div className="form-group">
+                            <label className="form-label">Batch Join</label>
+                            <div className="date-time-section">
+                          <div className="date-sec">
+                            <input type="date" 
+                             onChange={(e) => 
+                              setINP({
+                                ...inpval,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                            name="joinDate"
+                             className="form-control"></input>
+                          </div>
+                          <div className="time-sec" >
+                            <input type="time"
+                             onChange={(e) => 
+                              setINP({
+                                ...inpval,
+                                [e.target.name]: e.target.value,
+                              })
+                            }
+                            name="joinTime"
+                            className="form-control"></input>
+                          </div>
+                          </div>
                           </div>
                         </div>
 

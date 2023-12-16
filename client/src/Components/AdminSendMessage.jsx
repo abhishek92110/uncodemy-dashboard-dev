@@ -93,7 +93,10 @@ export default function AdminSendMessage() {
   function getdata() {
     console.log("get data running")
     setAllStudentData(JSON.parse(localStorage.getItem('allStudent')))
-    setCurrentUser(JSON.parse(localStorage.getItem('allStudent')).slice(start, end).map(data => {
+    // setCurrentUser(JSON.parse(localStorage.getItem('allStudent')).slice(start, end).map(data => {
+    //   return data
+    // }))
+    setCurrentUser(JSON.parse(localStorage.getItem('allStudent')).map(data => {
       return data
     }))
   }
@@ -125,7 +128,21 @@ export default function AdminSendMessage() {
   let tempCurrentStudent;
 
 
-  const individualCheckFunc =(allUser)=>{
+//   const individualCheckFunc =(allUser)=>{
+//   const individual = allUser.map(data => {
+//     console.log('current student')
+//     return (
+//       {
+//         status: "off",
+//         check: false
+//       })
+//   })
+//   console.log('individual check =', individual)
+//   setIndividualCheck(allUser)
+// }
+
+
+const individualCheckFunc =(allUser)=>{
   const individual = allUser.map(data => {
     console.log('current student')
     return (
@@ -135,7 +152,7 @@ export default function AdminSendMessage() {
       })
   })
   console.log('individual check =', individual)
-  setIndividualCheck(allUser)
+  setIndividualCheck(individual)
 }
   
 
@@ -168,70 +185,70 @@ export default function AdminSendMessage() {
 
 
 
-  const moveItem = () => {
-    console.log('move item', totalItem - end, JSON.parse(localStorage.getItem('allStudent')), totalItem);
-    // console.log('move item',totalItem);
+  // const moveItem = () => {
+  //   console.log('move item', totalItem - end, JSON.parse(localStorage.getItem('allStudent')), totalItem);
+  //   // console.log('move item',totalItem);
 
 
 
-    if ((totalItem - end) <= 10) {
-      console.log('if end')
-      setStart(end)
-      setEnd(end + (totalItem - end))
-      tempCurrentStudent = [...currentuser]
+  //   if ((totalItem - end) <= 10) {
+  //     console.log('if end')
+  //     setStart(end)
+  //     setEnd(end + (totalItem - end))
+  //     tempCurrentStudent = [...currentuser]
 
-      tempCurrentStudent = allStudentData.slice(end, (end + (totalItem - end))).map(data => {
-        return data
-      })
-
-
-      setCurrentUser(tempCurrentStudent)
-      individualCheckFunc(tempCurrentStudent)
-
-    }
-    else if ((totalItem - end) > 10) {
-      console.log('else end')
-
-      setStart(end)
-      setEnd(end + 10)
-      tempCurrentStudent = [...currentuser]
-
-      tempCurrentStudent = allStudentData.slice(end, end + 10).map(data => {
-        return data
-      })
+  //     tempCurrentStudent = allStudentData.slice(end, (end + (totalItem - end))).map(data => {
+  //       return data
+  //     })
 
 
-      setCurrentUser(tempCurrentStudent)
-      individualCheckFunc(tempCurrentStudent)
-    }
+  //     setCurrentUser(tempCurrentStudent)
+  //     individualCheckFunc(tempCurrentStudent)
 
-  }
+  //   }
+  //   else if ((totalItem - end) > 10) {
+  //     console.log('else end')
 
-  const backItem = () => {
+  //     setStart(end)
+  //     setEnd(end + 10)
+  //     tempCurrentStudent = [...currentuser]
 
-    if (start == 0) {
-      setStart(start)
-      setEnd(end)
-      setCurrentUser(currentuser)
-    }
-
-    else {
-      setEnd(start)
-      setStart(start - 10)
-
-      tempCurrentStudent = [...currentuser]
-
-      tempCurrentStudent = allStudentData.slice((start - 10), start).map(data => {
-        return data
-      })
+  //     tempCurrentStudent = allStudentData.slice(end, end + 10).map(data => {
+  //       return data
+  //     })
 
 
-      setCurrentUser(tempCurrentStudent)
-      individualCheckFunc(tempCurrentStudent)
-    }
+  //     setCurrentUser(tempCurrentStudent)
+  //     individualCheckFunc(tempCurrentStudent)
+  //   }
+
+  // }
+
+  // const backItem = () => {
+
+  //   if (start == 0) {
+  //     setStart(start)
+  //     setEnd(end)
+  //     setCurrentUser(currentuser)
+  //   }
+
+  //   else {
+  //     setEnd(start)
+  //     setStart(start - 10)
+
+  //     tempCurrentStudent = [...currentuser]
+
+  //     tempCurrentStudent = allStudentData.slice((start - 10), start).map(data => {
+  //       return data
+  //     })
 
 
-  }
+  //     setCurrentUser(tempCurrentStudent)
+  //     individualCheckFunc(tempCurrentStudent)
+  //   }
+
+
+  // }
 
   const IndividualChecked = (event, index) => {
     setCheckStatus(false)
@@ -575,10 +592,10 @@ export default function AdminSendMessage() {
                           </table>
 
                           <div className="clearfix" />
-                          <div className='right-left-arrow right-left-arrow-sendmessage'>
+                          {/* <div className='right-left-arrow right-left-arrow-sendmessage'>
                             <i class="fa-solid fa-left-long" onClick={backItem}></i>
                             <i class="fa-solid fa-right-long" onClick={moveItem}></i>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -689,10 +706,10 @@ export default function AdminSendMessage() {
                           </table>
 
                           <div className="clearfix" />
-                          <div className='right-left-arrow right-left-arrow-sendmessage'>
+                          {/* <div className='right-left-arrow right-left-arrow-sendmessage'>
                             <i class="fa-solid fa-left-long" onClick={backItem}></i>
                             <i class="fa-solid fa-right-long" onClick={moveItem}></i>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -782,7 +799,8 @@ export default function AdminSendMessage() {
                             </thead>
                             <tbody>
                               {currentuser && currentuser.map((data, index) => {
-                                index = start + index;
+                                console.log('current user and individual check =',currentuser,individualCheck)
+                                // index = start + index;
                                 return (
                                   <tr key={index}>
                                     <td>
@@ -804,10 +822,10 @@ export default function AdminSendMessage() {
                           </table>
 
                           <div className="clearfix" />
-                          <div className='right-left-arrow right-left-arrow-sendmessage'>
+                          {/* <div className='right-left-arrow right-left-arrow-sendmessage'>
                             <i class="fa-solid fa-left-long" onClick={backItem}></i>
                             <i class="fa-solid fa-right-long" onClick={moveItem}></i>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>

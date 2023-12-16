@@ -39,11 +39,12 @@ export default function TrainerMessage() {
   if(status.status==="active"){
     console.log('trainer details= ',status.data)
     let runningBatch = await ContextValue.getRunningBatch()
-    const allCourse = await ContextValue.getBatchByTrainer(status.data._id);
+    const allCourse = await ContextValue.getBatchByTrainer(status.data.code);
+    console.log('all course trainer message',allCourse)
 
     setTrainer(status.data)
     setAllCourse(status.data.Course)
-    setAllBatch(runningBatch.runningBatches)
+    setAllBatch(allCourse)
     getReceiveMessage(status.data.code)
     getStudentMessage(status.data.code)
 
@@ -279,19 +280,20 @@ else{
     return batchStatus
   }
 
-  const filterStudent = () => {
+  const filterStudent = async() => {
     console.log('all student =', allStudentData)
-    let filterStudent = allStudentData.filter((data, index) => {
-      // console.log('student data filter =',data.Batch,data.Course, detail.batch, detail.course)
+    // let filterStudent = allStudentData.filter((data, index) => {
+    //   // console.log('student data filter =',data.Batch,data.Course, detail.batch, detail.course)
 
-      // console.log('condition =',(detail.batch != null ? data.Batch === detail.batch : true) && (detail.course != null ? data.Course === detail.course : true))
+    //   // console.log('condition =',(detail.batch != null ? data.Batch === detail.batch : true) && (detail.course != null ? data.Course === detail.course : true))
 
-      return (detail.batch != null ? checkBatch(data.studentRunningBatch,detail.batch) : true) && (detail.course != null ? data.Course === detail.course : true)
+    //   return (detail.batch != null ? checkBatch(data.studentRunningBatch,detail.batch) : true) && (detail.course != null ? data.Course === detail.course : true)
     
-    }) 
-    
+    // }) 
+
     // console.log('all student after filter =', filterStudent)
 
+    let filterStudent  = await ContextValue.getRunningBatchStudent(detail.batch)
 
 
     const individual = filterStudent.map(data => {

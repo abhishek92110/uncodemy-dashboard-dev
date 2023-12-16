@@ -504,10 +504,11 @@ const StudentState = (props) => {
   const getBatchByTrainer = async (TrainerId) => {
 
     console.log('trainer id =', TrainerId)
-    let trainerBatch = await fetch(`http://localhost:8000/getTrainerBatch/${TrainerId}`, {
+    let trainerBatch = await fetch(`http://localhost:8000/getTrainerBatch/`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "id":TrainerId
       },
     });
 

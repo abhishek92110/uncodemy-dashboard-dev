@@ -1212,8 +1212,9 @@ router.get("/studentpro", async (req, res) => {
     }
 });
 
-router.get("/getTrainerBatch/:TrainerId", async (req, res) => {
-    const { TrainerId } = req.params
+router.get("/getTrainerBatch", async (req, res) => {
+
+    const TrainerId = req.header("id")
 
     try {
         let TrainerBatch = await runningBatch.find({ TrainerID: TrainerId })
@@ -2095,7 +2096,7 @@ router.get('/receivemessage', async (req, res) => {
 
             fetchData.user.id.filter(element => {
 
-                console.log('id and element id =',id,element.id)
+                // console.log('id and element id =',id,element.id)
                 if (id === element.id) 
                 {
                     message.push({
@@ -2154,7 +2155,7 @@ router.get('/Studentreceivemessage', async (req, res) => {
         fetchedItem.map((data, index) => {
 
             const fetchData = jwt.verify(data.messageid, jwt_secret);
-            console.log('fetchData =',fetchData.user.id)
+            // console.log('fetchData =',fetchData.user.id)
 
             // console.log('message =',fetchData, id)
 
@@ -3652,7 +3653,8 @@ router.post('/getUpcomingDemoesByCounselor', async (req, res) => {
 
 router.post('/getStudentByTrainer', async (req, res) => {
     try {
-        let filterStudent = await users.find({ TrainerID: req.body.TrainerId,courseRunningStatus:"active" }).select("-password -email -Number -Fees -Payment -status")
+        let filterStudent = await users.find({ AllTrainerId: req.body.TrainerId,courseRunningStatus:"active" }).select("-password -email -Number -Fees -Payment -status")
+        console.log('filterStudent =',filterStudent.length, req.body.TrainerId)
         res.send({ "status": "ok", "data": filterStudent })
     }
     catch (error) {

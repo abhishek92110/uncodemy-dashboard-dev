@@ -108,6 +108,7 @@ import LoadingBar from '../Students/BarLoading'
 import BarLoading from '../Students/BarLoading'
 import ForgetPassword from './ForgetPassword'
 import AddCommerceData from './Counselor/AddCommerceData'
+import RegistrationReceipt from '../Students/RegistrationReceipt'
 
 // import Navbaar from './components/Navbaar';
 export default function App() {
@@ -554,6 +555,7 @@ export default function App() {
             <Route exact path="/ReadMessage" element={<ReadMessage />} />
             <Route exact path="admin/Running-batches/Student" element={<RunningBatchStudent/>} />
             <Route exact path="admin/old-batches/Student" element={<RunningBatchStudent/>} />
+            <Route exact path="registrationReceipt" element={<RegistrationReceipt/>} />
           </Routes>
           <Footer />
         </StudentState >

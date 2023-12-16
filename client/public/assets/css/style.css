@@ -24012,6 +24012,7 @@ button {
   [data-theme-version="dark"] .table thead th {
     border-color: #383c46; }
 .table tbody tr td {
+  padding:5px;
   vertical-align: middle;
   border-color: #eaeaea; }
   [data-theme-version="dark"] .table tbody tr td {

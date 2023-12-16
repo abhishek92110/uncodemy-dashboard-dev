@@ -22,15 +22,23 @@ const RegisterStudentSchema = new mongoose.Schema({
     Pnumber: {
         type: String,
 
-
     },
+
     RegistrationDate: {
         type: String,
 
-    },
-    
+    }, 
+
     RegistrationFees: {
         type: String,
+
+    },
+    EMI: {
+        type: String,
+
+    },
+    totalInstallment: {
+        type: Number,
 
     },
 
@@ -52,12 +60,33 @@ const RegisterStudentSchema = new mongoose.Schema({
         type: String,
 
     },
+    CourseFees: {
+        type: String,
+
+    },
+    PaymentMethod: {
+        type: String,
+
+    },
+    joinTime: {
+        type: String,
+
+    },
+    joinDate: {
+        type: String,
+
+    },
+  
 
     RegistrationNo: {
         type: String,
 
     },
 
+    PaymentMode: {
+        type: String,
+
+    },
 
     TrainerName: {
         type: String,
